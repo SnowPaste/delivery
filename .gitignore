@@ -123,3 +123,6 @@ gradle-app.setting
 # Created by VS Code Java Extension
 .settings/
 .project
+
+# Ignore IntelliJ Folder
+.idea/
