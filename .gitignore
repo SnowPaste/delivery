@@ -124,5 +124,8 @@ gradle-app.setting
 .settings/
 .project
 
-# Ignore IntelliJ Folder
+# Ignore IntelliJ Folder (Eve Chen)
 .idea/
+
+# Ignore other files (Eve Chen)
+delivery.iml
