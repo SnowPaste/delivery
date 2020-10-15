@@ -11,9 +11,18 @@ public class ModelModule {
     }
 
     @Provides
+    public Class<Restaurant> provideRestaurantClass() {
+        return Restaurant.class;
+    }
+
+    @Provides
+    public Class<Dish> provideDishClass() {
+        return Dish.class;
+    }
+
+    @Provides
     public Class<Address> provideAddressClass() {
         return Address.class;
-    }
 
     @Provides
     public Class<Cart> provideCartClass() {
