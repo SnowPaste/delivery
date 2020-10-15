@@ -4,6 +4,7 @@
 
 ### Code ###
 .vscode/*
+.idea/
 
 ### Java ###
 # Compiled class file
@@ -123,3 +124,9 @@ gradle-app.setting
 # Created by VS Code Java Extension
 .settings/
 .project
+
+# Ignore IntelliJ Folder (Eve Chen)
+.idea/
+
+# Ignore other files (Eve Chen)
+delivery.iml
