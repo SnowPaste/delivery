@@ -4,7 +4,7 @@
 
 ### Code ###
 .vscode/*
-.idea/*
+.idea/
 
 ### Java ###
 # Compiled class file
