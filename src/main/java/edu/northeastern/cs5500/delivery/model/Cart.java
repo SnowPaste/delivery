@@ -17,21 +17,4 @@ public class Cart {
     public boolean isValid() {
         return customer != null;
     }
-
-    /** empty the cart */
-    public void emptyCart() {
-        items.clear();
-        tip = 0.0;
-        totalPrice = 0.0;
-    }
-
-    /** add a dish to the cart */
-    public void addItem(Dish dish) {
-        items.add(dish);
-        totalPrice += dish.getPrice();
-    }
-
-    public void removeItem(Dish dish) {
-        items.remove(dish);
-    }
 }
