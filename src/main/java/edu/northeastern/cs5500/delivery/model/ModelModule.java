@@ -23,5 +23,14 @@ public class ModelModule {
     @Provides
     public Class<Address> provideAddressClass() {
         return Address.class;
+
+    @Provides
+    public Class<Cart> provideCartClass() {
+        return Cart.class;
+    }
+
+    @Provides
+    public Class<Order> provideOrderClass() {
+        return Order.class;
     }
 }
