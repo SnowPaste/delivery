@@ -52,7 +52,7 @@ public class DishController {
 
     @Nonnull
     public Collection<Dish> getDishes() {
-        log.debug("DeliveryController > getDishes()");
+        log.debug("DishController > getDishes()");
         return dishes.getAll();
     }
 
@@ -75,9 +75,9 @@ public class DishController {
         return dishes.add(dish);
     }
 
-    public void updateDish(@Nonnull Dish delivery) throws Exception {
+    public void updateDish(@Nonnull Dish dish) throws Exception {
         log.debug("DishController > updateDish(...)");
-        dishes.update(delivery);
+        dishes.update(dish);
     }
 
     public void deleteDish(@Nonnull ObjectId id) throws Exception {
