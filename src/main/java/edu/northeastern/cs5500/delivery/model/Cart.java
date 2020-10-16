@@ -1,9 +1,9 @@
 package edu.northeastern.cs5500.delivery.model;
 
-import lombok.Data;
-import java.util.ArrayList;
-import org.bson.types.ObjectId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import lombok.Data;
+import org.bson.types.ObjectId;
 
 @Data
 public class Cart implements Model {
@@ -12,7 +12,7 @@ public class Cart implements Model {
     private ArrayList<Dish> items;
     private Double tip;
     private Double totalPrice;
-    
+
     /** @return true if this cart is valid */
     @JsonIgnore
     public boolean isValid() {
