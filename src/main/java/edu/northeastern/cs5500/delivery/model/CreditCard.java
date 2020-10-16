@@ -1,7 +1,14 @@
+package edu.northeastern.cs5500.delivery.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import org.bson.types.ObjectId;
 import java.time.LocalDate;
 
-public class CreditCard {
+@Data
+public class CreditCard implements Model {
 
+  private ObjectId id;
   private String cardNumber;
   private String firstName;
   private String lastName;
@@ -9,20 +16,14 @@ public class CreditCard {
   private LocalDate expDate;
 
   /**
-   * Constructor of CreditCard Class
-   * @param cardNumber String representing the card number of this object
-   * @param firstName String representing the first name of the holder of this object
-   * @param lastName String representing the last name of the holder of this object
-   * @param securityCode String representing the security code of this object
-   * @param expDate LocalDate representing the expiration date of this object
+   * @return true if this delivery is valid
    */
-  public CreditCard(String cardNumber, String firstName, String lastName, String securityCode,
-      LocalDate expDate) {
-    this.cardNumber = cardNumber;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.securityCode = securityCode;
-    this.expDate = expDate;
+  @JsonIgnore
+  public boolean isValid() {
+    return cardNumber != null && !cardNumber.isEmpty() &&
+        firstName != null && !firstName.isEmpty() &&
+        lastName != null && !lastName.isEmpty() &&
+        securityCode != null && !securityCode.isEmpty() &&
+        expDate != null && expDate.compareTo(LocalDate.now()) < 0;
   }
-
 }
