@@ -11,6 +11,7 @@ public class ModelModule {
     }
 
     @Provides
+
     public Class<Driver> provideDriverClass() {return Driver.class;}
 
     @Provides
@@ -18,4 +19,30 @@ public class ModelModule {
 
     @Provides
     public Class<Customer> provideCustomerClass() {return Customer.class;}
+  
+    @Provides
+    public Class<Restaurant> provideRestaurantClass() {
+        return Restaurant.class;
+    }
+
+    @Provides
+    public Class<Dish> provideDishClass() {
+        return Dish.class;
+    }
+
+    @Provides
+    public Class<Address> provideAddressClass() {
+        return Address.class;
+    }
+
+    @Provides
+    public Class<Cart> provideCartClass() {
+        return Cart.class;
+    }
+
+    @Provides
+    public Class<Order> provideOrderClass() {
+        return Order.class;
+    }
+
 }
