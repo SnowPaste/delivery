@@ -1,6 +1,7 @@
 package edu.northeastern.cs5500.delivery.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -17,6 +18,7 @@ public class Customer implements Model{
   private ArrayList<Order> orderHistory;
   private Cart cart;
   private ArrayList<Address> addressList;
+  private ArrayList<CreditCard> creditCards;
 
   /** @return true if this delivery is valid */
   @JsonIgnore

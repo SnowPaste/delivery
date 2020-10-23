@@ -1,6 +1,7 @@
 package edu.northeastern.cs5500.delivery.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -16,6 +17,9 @@ public class Driver implements Model {
   private String carModel;
   private String carLicence;
   private double rate;
+  private ArrayList<Order> completeOrders;
+  private ArrayList<Order> currOrders;
+  private int maxOrderNum;
 
   /** @return true if this delivery is valid */
   @JsonIgnore

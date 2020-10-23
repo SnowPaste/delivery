@@ -14,6 +14,7 @@ public class CreditCard implements Model {
   private String lastName;
   private String securityCode;
   private LocalDate expDate;
+  private Address billingAddress;
 
   /**
    * @return true if this delivery is valid
@@ -24,6 +25,6 @@ public class CreditCard implements Model {
         firstName != null && !firstName.isEmpty() &&
         lastName != null && !lastName.isEmpty() &&
         securityCode != null && !securityCode.isEmpty() &&
-        expDate != null && expDate.compareTo(LocalDate.now()) < 0;
+        expDate != null && billingAddress != null;
   }
 }
