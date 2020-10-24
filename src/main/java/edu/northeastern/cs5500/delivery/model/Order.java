@@ -12,7 +12,8 @@ public class Order implements Model {
         PREPARING,
         WAITING_FOR_DRIVER,
         PICKED_UP,
-        DELIVERED
+        DELIVERED,
+        CANCELLED
     }
 
     private ObjectId id;
@@ -29,6 +30,6 @@ public class Order implements Model {
     /** @return true if this order is a valid order */
     @JsonIgnore
     public boolean isValid() {
-        return customer != null && restaurant != null && driver != null && cart != null;
+        return customer.isValid() && restaurant.isValid() && driver.isValid() && cart.isValid();
     }
 }
