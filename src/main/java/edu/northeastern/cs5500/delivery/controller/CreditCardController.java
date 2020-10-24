@@ -15,88 +15,89 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class CreditCardController {
 
-  private final GenericRepository<CreditCard> creditCards;
-  private static final int CREDIT_CARD_NUMBER_LENGTH = 16;
-  private static final int SECURITY_CODE_LENGTH = 3;
+    private final GenericRepository<CreditCard> creditCards;
+    private static final int CREDIT_CARD_NUMBER_LENGTH = 16;
+    private static final int SECURITY_CODE_LENGTH = 3;
 
-  @Inject
-  CreditCardController(GenericRepository<CreditCard> creditCardRepository) {
-    creditCards = creditCardRepository;
-    log.info("CreditCardController > construct");
-  }
-
-  @Nullable
-  public CreditCard getCreditCard(@Nonnull ObjectId uuid) {
-    log.debug("CreditCardController > getCreditCard({})", uuid);
-    return creditCards.get(uuid);
-  }
-
-  @Nonnull
-  public Collection<CreditCard> getCreditCards() {
-    log.debug("CreditCardController > getCreditCards()");
-    return creditCards.getAll();
-  }
-
-  @Nonnull
-  public CreditCard addCreditCard(@Nonnull CreditCard creditCard) throws Exception {
-    log.debug("CreditCardController > addCreditCard(...)");
-    if (!creditCard.isValid() && isCreditCardNumberValid(creditCard) && isCreditCodeValid(
-        creditCard) && isSecurityCodeValid(creditCard)) {
-      // TODO: replace with a real invalid object exception
-      // probably not one exception per object type though...
-      throw new Exception("InvalidCreditCardException");
+    @Inject
+    CreditCardController(GenericRepository<CreditCard> creditCardRepository) {
+        creditCards = creditCardRepository;
+        log.info("CreditCardController > construct");
     }
 
-    ObjectId id = creditCard.getId();
-
-    if (id != null && creditCards.get(id) != null) {
-      // TODO: replace with a real duplicate key exception
-      throw new Exception("DuplicateKeyException");
+    @Nullable
+    public CreditCard getCreditCard(@Nonnull ObjectId uuid) {
+        log.debug("CreditCardController > getCreditCard({})", uuid);
+        return creditCards.get(uuid);
     }
 
-    return creditCards.add(creditCard);
-  }
+    @Nonnull
+    public Collection<CreditCard> getCreditCards() {
+        log.debug("CreditCardController > getCreditCards()");
+        return creditCards.getAll();
+    }
 
-  public void updateCreditCard(@Nonnull CreditCard creditCard) throws Exception {
-    log.debug("CreditCardController > updateCreditCard(...)");
-    creditCards.update(creditCard);
-  }
+    @Nonnull
+    public CreditCard addCreditCard(@Nonnull CreditCard creditCard) throws Exception {
+        log.debug("CreditCardController > addCreditCard(...)");
+        if (!creditCard.isValid()
+                && isCreditCardNumberValid(creditCard)
+                && isCreditCodeValid(creditCard)
+                && isSecurityCodeValid(creditCard)) {
+            // TODO: replace with a real invalid object exception
+            // probably not one exception per object type though...
+            throw new Exception("InvalidCreditCardException");
+        }
 
-  public void deleteCreditCard(@Nonnull ObjectId id) throws Exception {
-    log.debug("CreditCardController > deleteDelivery(...)");
-    creditCards.delete(id);
-  }
+        ObjectId id = creditCard.getId();
 
-  /**
-   * Method to check if credit card number provided is valid or not
-   *
-   * @return true if card number contains only numbers and length of card number equals to 16.
-   * Otherwise return false
-   */
-  private boolean isCreditCardNumberValid(CreditCard creditCard) {
-    return creditCard.getCardNumber().matches("[0-9]+")
-        && creditCard.getCardNumber().length() == CREDIT_CARD_NUMBER_LENGTH;
-  }
+        if (id != null && creditCards.get(id) != null) {
+            // TODO: replace with a real duplicate key exception
+            throw new Exception("DuplicateKeyException");
+        }
 
-  /**
-   * Method to check if security code provided is valid or not
-   *
-   * @return true if security code contains only numbers and length of security code is 3
-   */
-  private boolean isSecurityCodeValid(CreditCard creditCard) {
-    return creditCard.getSecurityCode().matches("[0-9]+")
-        && creditCard.getSecurityCode().length() == SECURITY_CODE_LENGTH;
-  }
+        return creditCards.add(creditCard);
+    }
 
-  /**
-   * Method to check if credit card is valid at the current time
-   *
-   * @return true if the credit card does not expire
-   */
-  private boolean isCreditCodeValid(CreditCard creditCard) {
-    LocalDate expDate = creditCard.getExpDate();
-    LocalDate now = LocalDate.now();
-    return expDate.compareTo(now) > 0;
-  }
+    public void updateCreditCard(@Nonnull CreditCard creditCard) throws Exception {
+        log.debug("CreditCardController > updateCreditCard(...)");
+        creditCards.update(creditCard);
+    }
 
+    public void deleteCreditCard(@Nonnull ObjectId id) throws Exception {
+        log.debug("CreditCardController > deleteDelivery(...)");
+        creditCards.delete(id);
+    }
+
+    /**
+     * Method to check if credit card number provided is valid or not
+     *
+     * @return true if card number contains only numbers and length of card number equals to 16.
+     *     Otherwise return false
+     */
+    private boolean isCreditCardNumberValid(CreditCard creditCard) {
+        return creditCard.getCardNumber().matches("[0-9]+")
+                && creditCard.getCardNumber().length() == CREDIT_CARD_NUMBER_LENGTH;
+    }
+
+    /**
+     * Method to check if security code provided is valid or not
+     *
+     * @return true if security code contains only numbers and length of security code is 3
+     */
+    private boolean isSecurityCodeValid(CreditCard creditCard) {
+        return creditCard.getSecurityCode().matches("[0-9]+")
+                && creditCard.getSecurityCode().length() == SECURITY_CODE_LENGTH;
+    }
+
+    /**
+     * Method to check if credit card is valid at the current time
+     *
+     * @return true if the credit card does not expire
+     */
+    private boolean isCreditCodeValid(CreditCard creditCard) {
+        LocalDate expDate = creditCard.getExpDate();
+        LocalDate now = LocalDate.now();
+        return expDate.compareTo(now) > 0;
+    }
 }
