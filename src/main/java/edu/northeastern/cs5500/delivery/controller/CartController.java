@@ -20,7 +20,8 @@ public class CartController {
     private final Double INIT_TIP = 0.0;
 
     @Inject
-    CartController(GenericRepository<Cart> cartRepository, GenericRepository<Dish> dishRepository) {
+    public CartController(
+            GenericRepository<Cart> cartRepository, GenericRepository<Dish> dishRepository) {
         carts = cartRepository;
         dishes = dishRepository;
 
@@ -167,17 +168,18 @@ public class CartController {
         cart.setTip(tip);
     }
 
-    public void addDish(@Nonnull ObjectId dishId, @Nonnull Cart cart) throws Exception {
-        log.debug("CartController > addDish({})", dishId);
-        if (dishes.get(dishId) == null) {
+    public void addDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
+        log.debug("CartController > addDish({})", dish.getId());
+        if (dishes.get(dish.getId()) == null) {
             throw new Exception("Dish doesn't exists");
         }
         if (carts.get(cart.getId()) == null || cart.getId() == null) {
             throw new Exception("Cart doesn't exists");
         }
 
-        cart.getItems().add(dishes.get(dishId));
+        cart.getItems().add(dish);
         updateCart(cart);
+        System.out.println("Dish " + dish.getName() + "is added");
     }
 
     public void removeDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
@@ -195,10 +197,12 @@ public class CartController {
 
         cart.getItems().remove(dish);
         updateCart(cart);
+        System.out.println("Dish " + dish.getName() + "is removed");
     }
 
     public void emptyCart(@Nonnull Cart cart) throws Exception {
         cart.setItems(new ArrayList<Dish>());
         updateCart(cart);
+        System.out.println("Cart has been cleared");
     }
 }
