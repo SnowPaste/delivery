@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 @Data
 public class Driver implements Model {
 
+  private boolean isAvailable = true;
   private ObjectId id;
   private String driverID;
   private String firstName;
@@ -20,6 +21,7 @@ public class Driver implements Model {
   private ArrayList<Order> completeOrders;
   private ArrayList<Order> currOrders;
   private int maxOrderNum;
+
 
   /** @return true if this delivery is valid */
   @JsonIgnore

@@ -80,6 +80,11 @@ public class DriverController {
       ArrayList<Order> orderList = driver.getCurrOrders();
       orderList.add(order);
       driver.setCurrOrders(orderList);
+      if (driver.getCurrOrders().size() < driver.getMaxOrderNum()) {
+        driver.setAvailable(true);
+      } else {
+        driver.setAvailable(false);
+      }
       return true;
     } else {
       return false;
@@ -88,7 +93,7 @@ public class DriverController {
 
   private boolean canTakeMoreOrder(Driver driver) {
     // check if the number of the orders taken by the driver has exceed capacity
-    return driver.getCurrOrders().size() < driver.getMaxOrderNum();
+    return driver.isAvailable();
   }
 
   /**
@@ -102,6 +107,11 @@ public class DriverController {
     // TODO: this method should be called by a Order object
     driver.getCurrOrders().remove(order);
     driver.getCompleteOrders().add(order);
+    if (driver.getCurrOrders().size() < driver.getMaxOrderNum()) {
+      driver.setAvailable(true);
+    } else {
+      driver.setAvailable(false);
+    }
   }
 
 

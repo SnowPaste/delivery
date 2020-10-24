@@ -64,11 +64,11 @@ public class CustomerController {
     customers.delete(id);
   }
 
-  public void makeOrder(@Nonnull Customer customer) throws Exception {
-    log.debug("CustomerController > makeOrder(...)");
-    // TODO: Cart should have attribute "Restaurant"?
-    // TODO: restaurantController.acceptOrder()?
-    // TODO: Order should have a method to publish an order and ask for drivers?
-
-  }
+//  public void makeOrder(@Nonnull Customer customer) throws Exception {
+//    log.debug("CustomerController > makeOrder(...)");
+//    // TODO: Cart should have attribute "Restaurant"?
+//    // TODO: restaurantController.acceptOrder()?
+//    // TODO: Order should have a method to publish an order and ask for drivers?
+//
+//  }
 }
