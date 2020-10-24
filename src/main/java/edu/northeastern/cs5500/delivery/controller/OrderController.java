@@ -2,7 +2,7 @@ package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.*;
 import edu.northeastern.cs5500.delivery.model.Order.Status;
-import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import edu.northeastern.cs5500.delivery.repository.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import javax.annotation.Nonnull;
@@ -16,13 +16,15 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class OrderController {
     private final GenericRepository<Order> orders;
-    // private final GenericRepository<Driver> drivers;
-    // private final DriverController driverController = new DriverController(drivers);
+    private final GenericRepository<Driver> drivers;
+    private final DriverController driverController;
 
     @Inject
-    OrderController(GenericRepository<Order> orderRepository) {
+    OrderController(
+            GenericRepository<Order> orderRepository, GenericRepository<Driver> driverRepository) {
         orders = orderRepository;
-        // drivers = driverRepository;
+        drivers = driverRepository;
+        driverController = new DriverController(drivers);
 
         log.info("OrderController > construct");
 
@@ -96,75 +98,75 @@ public class OrderController {
         return order.getEstDeliverTime();
     }
 
-    // private void assignDriver(@Nonnull Order order) throws Exception {
-    //     Driver assigned_driver = null;
-    //     for (Driver d : drivers.getAll()) {
-    //         if (d.getAvailable()) {
-    //             assigned_driver = d;
-    //             break;
-    //         }
-    //     }
-    //     if (assigned_driver != null) {
-    //         order.setDriver(assigned_driver);
-    //         System.out.println("Assigned driver " + assigned_driver.getFirstName() + " for order
-    // " + order.getId());
-    //         // log.info("Assigned driver {} for order {}", assigned_driver.getFirstName(),
-    // order.getId());
-    //     } else {
-    //         System.out.println("No available driver");
-    //         throw new Exception("No available driver");
-    //     }
-    // }
+    private void assignDriver(@Nonnull Order order) throws Exception {
+        Driver assigned_driver = null;
+        for (Driver d : drivers.getAll()) {
+            if (d.isAvailable()) {
+                assigned_driver = d;
+                break;
+            }
+        }
+        if (assigned_driver != null) {
+            order.setDriver(assigned_driver);
+            System.out.println(
+                    "Assigned driver "
+                            + assigned_driver.getFirstName()
+                            + " for order"
+                            + order.getId());
+            // log.info("Assigned driver {} for order {}",
+            // assigned_driver.getFirstName(),order.getId());
+        } else {
+            System.out.println("No available driver");
+            throw new Exception("No available driver");
+        }
+    }
 
-    // private void notifyRestaurant(@Nonnull Order order) {
-    //     GenericRepository<Restaurant> restaurantRepository = new
-    // InMemoryRepository<Restaurant>();
-    //     RestaurantController restaurantController = new
-    // RestaurantController(restaurantRepository);
-    //     restaurantController.finishOrder(order);
-    // }
+    private void notifyRestaurant(@Nonnull Order order) throws Exception {
+        GenericRepository<Restaurant> restaurantRepository = new InMemoryRepository<Restaurant>();
+        RestaurantController restaurantController = new RestaurantController(restaurantRepository);
+        restaurantController.finishOrder(order);
+    }
 
-    // public boolean makeOrder(@Nonnull Order order) throws Exception {
-    //     try {
-    //         order.setCreateTime(LocalDateTime.now());
-    //         System.out.println("Order was placed at " + order.getCreateTime());
-    //         getOrderEstDeliverTime(order);
-    //         System.out.println("The estimated deliver time is " + order.getEstDeliverTime());
-    //         assignDriver(order);
-    //         System.out.println("The driver assigned for this order is " +
-    // order.getDriver().getFirstName());
-    //         order.setStatus(Status.PROCESSING);
-    //         notifyRestaurant(order);
-    //         System.out.println("Restaurant " + order.getRestaurant().getName() + "is preparing
-    // your order");
-    //     } catch (Exception e) {
-    //         log.error("OrderController > makeOrder failure");
-    //         e.printStackTrace();
-    //     }
-    //     System.out.println("Order placed successfully!");
-    //     return true;
-    // }
+    public boolean makeOrder(@Nonnull Order order) throws Exception {
+        try {
+            order.setCreateTime(LocalDateTime.now());
+            System.out.println("Order was placed at " + order.getCreateTime());
+            getOrderEstDeliverTime(order);
+            System.out.println("The estimated deliver time is " + order.getEstDeliverTime());
+            assignDriver(order);
+            System.out.println(
+                    "The driver assigned for this order is " + order.getDriver().getFirstName());
+            order.setStatus(Status.PROCESSING);
+            notifyRestaurant(order);
+            System.out.println(
+                    "Restaurant " + order.getRestaurant().getName() + "is preparing your order");
+        } catch (Exception e) {
+            log.error("OrderController > makeOrder failure");
+            e.printStackTrace();
+        }
+        System.out.println("Order placed successfully!");
+        return true;
+    }
 
-    // public void cancelOrder(@Nonnull Order order) throws Exception {
-    //     if (order.getStatus() != Status.PROCESSING) {
-    //         throw new Exception("The restaurant has started preparing your order, your order
-    // can't be cancelled");
-    //     } else {
-    //         order.setStatus(Status.CANCELLED);
-    //         notifyRestaurant(order);
-    //         driverController.manageCompletedOrder(order.getDriver(), order);
-    //         System.out.println("Your order has been cancelled");
-    //     }
-    // }
+    public void cancelOrder(@Nonnull Order order) throws Exception {
+        if (order.getStatus() != Status.PROCESSING) {
+            throw new Exception(
+                    "The restaurant has started preparing your order, your order can't be cancelled");
+        } else {
+            order.setStatus(Status.CANCELLED);
+            notifyRestaurant(order);
+            driverController.manageCompletedOrder(order.getDriver(), order);
+            System.out.println("Your order has been cancelled");
+        }
+    }
 
-    // public void completeOrder(@Nonnull Order order) {
-    //     driverController.manageCompletedOrder(order.getDriver(), order);
-    //     notifyCustomer(order);
-    //     System.out.println("The order has completed");
-    // }
+    public void completeOrder(@Nonnull Order order) throws Exception {
+        driverController.manageCompletedOrder(order.getDriver(), order);
+        notifyCustomer(order);
+        System.out.println("The order has completed");
+    }
 
-    // private void notifyCustomer(@Nonnull Order order) {
-    //     System.out.println("Your order" + order.getId() +  "has been delivered, enjoy!");
-    // }
-
+    private void notifyCustomer(@Nonnull Order order) {
+        System.out.println("Your order" + order.getId() + "has been delivered, enjoy!");
+    }
 }
