@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import lombok.Data;
 import org.bson.types.ObjectId;
+import java.util.ArrayList;
 
 @Data
 public class Customer implements Model{
-
   private ObjectId id;
   private String accountName;
   private String passWord;

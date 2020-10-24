@@ -31,5 +31,4 @@ public class Driver implements Model {
         lastName != null && !lastName.isEmpty();
   }
 
-
 }
