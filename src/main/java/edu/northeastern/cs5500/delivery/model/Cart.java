@@ -9,13 +9,14 @@ import org.bson.types.ObjectId;
 public class Cart implements Model {
     private ObjectId id;
     private Customer customer;
-    private ArrayList<Dish> items;
+    private Restaurant restaurant;
+    private ArrayList<Dish> items = new ArrayList<Dish>();
     private Double tip;
-    private Double totalPrice;
+    private Double totalPrice = 0.0;
 
     /** @return true if this cart is valid */
     @JsonIgnore
     public boolean isValid() {
-        return customer != null;
+        return customer.isValid() && restaurant.isValid();
     }
 }

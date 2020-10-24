@@ -18,8 +18,8 @@ public class Driver implements Model {
     private String carModel;
     private String carLicence;
     private double rate;
-    private ArrayList<Order> completeOrders;
-    private ArrayList<Order> currOrders;
+    private ArrayList<Order> completeOrders = new ArrayList<Order>();
+    private ArrayList<Order> currOrders = new ArrayList<Order>();
     private int maxOrderNum;
 
     /** @return true if this delivery is valid */
