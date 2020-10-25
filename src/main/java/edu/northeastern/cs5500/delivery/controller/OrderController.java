@@ -16,15 +16,19 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class OrderController {
     private final GenericRepository<Order> orders;
-    private final GenericRepository<Driver> drivers;
-    private final DriverController driverController;
+    private final RepositoryModule repositoryModule = new RepositoryModule();
 
     @Inject
-    OrderController(
-            GenericRepository<Order> orderRepository, GenericRepository<Driver> driverRepository) {
+    DriverController driverController =
+            new DriverController(repositoryModule.provideDriverRepository());
+
+    @Inject
+    RestaurantController restaurantController =
+            new RestaurantController(repositoryModule.provideRestaurantRepository());
+
+    @Inject
+    public OrderController(GenericRepository<Order> orderRepository) {
         orders = orderRepository;
-        drivers = driverRepository;
-        driverController = new DriverController(drivers);
 
         log.info("OrderController > construct");
 
@@ -44,12 +48,12 @@ public class OrderController {
         defaultOrder.setCustomer(defaultCustomer);
         defaultOrder.setCart(defaultCart);
 
-        try {
-            addOrder(defaultOrder);
-        } catch (Exception e) {
-            log.error("OrderController > construct > adding default order > failure>");
-            e.printStackTrace();
-        }
+        // try {
+        //     addOrder(defaultOrder);
+        // } catch (Exception e) {
+        //     log.error("OrderController > construct > adding default order > failure>");
+        //     e.printStackTrace();
+        // }
     }
 
     @Nullable
@@ -100,7 +104,7 @@ public class OrderController {
 
     private void assignDriver(@Nonnull Order order) throws Exception {
         Driver assigned_driver = null;
-        for (Driver d : drivers.getAll()) {
+        for (Driver d : driverController.getDrivers()) {
             if (d.isAvailable()) {
                 assigned_driver = d;
                 break;
@@ -111,7 +115,7 @@ public class OrderController {
             System.out.println(
                     "Assigned driver "
                             + assigned_driver.getFirstName()
-                            + " for order"
+                            + " for order "
                             + order.getId());
             // log.info("Assigned driver {} for order {}",
             // assigned_driver.getFirstName(),order.getId());
@@ -122,30 +126,42 @@ public class OrderController {
     }
 
     private void notifyRestaurant(@Nonnull Order order) throws Exception {
-        GenericRepository<Restaurant> restaurantRepository = new InMemoryRepository<Restaurant>();
-        RestaurantController restaurantController = new RestaurantController(restaurantRepository);
         restaurantController.finishOrder(order);
     }
 
-    public boolean makeOrder(@Nonnull Order order) throws Exception {
+    public Order makeOrder(@Nonnull Cart cart) throws Exception {
         try {
+            Order order = new Order();
+            order.setRestaurant(cart.getRestaurant());
+            order.setCart(cart);
+            order.setCustomer(cart.getCustomer());
+
             order.setCreateTime(LocalDateTime.now());
-            System.out.println("Order was placed at " + order.getCreateTime());
+            System.out.println(
+                    "Order was placed at "
+                            + order.getCreateTime().getHour()
+                            + ":"
+                            + order.getCreateTime().getMinute());
             getOrderEstDeliverTime(order);
-            System.out.println("The estimated deliver time is " + order.getEstDeliverTime());
+            System.out.println(
+                    "The estimated deliver time is "
+                            + order.getEstDeliverTime().getHour()
+                            + ":"
+                            + order.getEstDeliverTime().getMinute());
             assignDriver(order);
             System.out.println(
                     "The driver assigned for this order is " + order.getDriver().getFirstName());
             order.setStatus(Status.PROCESSING);
-            notifyRestaurant(order);
+            System.out.println("Order placed successfully!");
             System.out.println(
-                    "Restaurant " + order.getRestaurant().getName() + "is preparing your order");
+                    "Restaurant " + order.getRestaurant().getName() + " is preparing your order");
+            notifyRestaurant(order);
+            return order;
         } catch (Exception e) {
             log.error("OrderController > makeOrder failure");
             e.printStackTrace();
         }
-        System.out.println("Order placed successfully!");
-        return true;
+        return null;
     }
 
     public void cancelOrder(@Nonnull Order order) throws Exception {
@@ -167,6 +183,6 @@ public class OrderController {
     }
 
     private void notifyCustomer(@Nonnull Order order) {
-        System.out.println("Your order" + order.getId() + "has been delivered, enjoy!");
+        System.out.println("Your order " + order.getId() + " has been delivered, enjoy!");
     }
 }

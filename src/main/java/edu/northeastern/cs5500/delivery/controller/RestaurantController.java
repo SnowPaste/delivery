@@ -8,6 +8,7 @@ import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -113,7 +114,8 @@ public class RestaurantController {
         log.debug("RestaurantController > finishingOrder(...)");
         if (order.getStatus() == Order.Status.PROCESSING) {
             order.setStatus(Order.Status.PREPARING);
-            wait(5000);
+            // wait(5000);
+            TimeUnit.SECONDS.sleep(3);
             order.setStatus(Order.Status.WAITING_FOR_DRIVER);
         }
     }

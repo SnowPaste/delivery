@@ -23,6 +23,19 @@ public class DriverController {
         drivers = driverRepository;
 
         log.info("DriverController > construct");
+
+        final Driver defaultDriver = new Driver();
+        defaultDriver.setFirstName("Jane");
+        defaultDriver.setLastName("Doe");
+        defaultDriver.setDriverID("123asdf");
+        defaultDriver.setAvailable(true);
+
+        try {
+            addDriver(defaultDriver);
+        } catch (Exception e) {
+            log.error("DriverController > construct > adding default driver failure?");
+            e.printStackTrace();
+        }
     }
 
     @Nullable
