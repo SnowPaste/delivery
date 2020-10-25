@@ -1,8 +1,8 @@
 package edu.northeastern.cs5500.delivery.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.bson.types.ObjectId;
 import lombok.Data;
+import org.bson.types.ObjectId;
 
 @Data
 public class Address implements Model {

@@ -1,8 +1,7 @@
 package edu.northeastern.cs5500.delivery.model;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDateTime;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -13,7 +12,8 @@ public class Order implements Model {
         PREPARING,
         WAITING_FOR_DRIVER,
         PICKED_UP,
-        DELIVERED
+        DELIVERED,
+        CANCELLED
     }
 
     private ObjectId id;
@@ -30,6 +30,6 @@ public class Order implements Model {
     /** @return true if this order is a valid order */
     @JsonIgnore
     public boolean isValid() {
-        return customer != null && restaurant != null && driver != null && cart != null;
+        return customer.isValid() && restaurant.isValid() && driver.isValid() && cart.isValid();
     }
 }

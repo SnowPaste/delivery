@@ -2,11 +2,13 @@ package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.Address;
 import edu.northeastern.cs5500.delivery.model.Dish;
+import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -106,5 +108,15 @@ public class RestaurantController {
     public void deleteRestaurant(@Nonnull ObjectId id) throws Exception {
         log.debug("RestaurantController > deleteRestaurant(...)");
         restaurants.delete(id);
+    }
+
+    public void finishOrder(@Nonnull Order order) throws Exception {
+        log.debug("RestaurantController > finishingOrder(...)");
+        if (order.getStatus() == Order.Status.PROCESSING) {
+            order.setStatus(Order.Status.PREPARING);
+            // wait(5000);
+            TimeUnit.SECONDS.sleep(3);
+            order.setStatus(Order.Status.WAITING_FOR_DRIVER);
+        }
     }
 }
