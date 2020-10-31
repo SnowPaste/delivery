@@ -93,6 +93,7 @@ public class DriverController {
             ArrayList<Order> orderList = driver.getCurrOrders();
             orderList.add(order);
             driver.setCurrOrders(orderList);
+            OrderController.setOrderStatusToPickedUp(order);
             if (driver.getCurrOrders().size() < driver.getMaxOrderNum()) {
                 driver.setAvailable(true);
             } else {
@@ -119,7 +120,7 @@ public class DriverController {
     public void manageCompletedOrder(@Nonnull Driver driver, @Nonnull Order order)
             throws Exception {
         log.debug("DriverController > popOutCompletedOrder(...)");
-        // TODO: this method should be called by a Order object
+
         driver.getCurrOrders().remove(order);
         driver.getCompleteOrders().add(order);
         if (driver.getCurrOrders().size() < driver.getMaxOrderNum()) {
