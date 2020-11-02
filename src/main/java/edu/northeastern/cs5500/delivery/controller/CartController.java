@@ -105,10 +105,10 @@ public class CartController {
         return id;
     }
 
-    public Customer getCartOwner(@Nonnull Cart cart) throws Exception {
-        log.debug("CartController > getCartOwner(...)");
-        return cart.getCustomer();
-    }
+    // public Customer getCartOwner(@Nonnull Cart cart) throws Exception {
+    //     log.debug("CartController > getCartOwner(...)");
+    //     return cart.getCustomer();
+    // }
 
     public ArrayList<Dish> getCartItems(@Nonnull Cart cart) throws Exception {
         log.debug("CartController > getCartItems(...)");
@@ -172,8 +172,7 @@ public class CartController {
         cart.setTip(tip);
     }
 
-    public void addDish(@Nonnull Dish dish, @Nonnull Restaurant restaurant, @Nonnull Cart cart)
-            throws Exception {
+    public void addDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > addDish({})", dish.getId());
         // if (dishes.get(dish.getId()) == null) {
         //     throw new Exception("Dish doesn't exists");
@@ -182,8 +181,8 @@ public class CartController {
         //     throw new Exception("Cart doesn't exists");
         // }
         if (cart.getRestaurant() == null) {
-            cart.setRestaurant(restaurant);
-        } else if (cart.getRestaurant() != restaurant) {
+            cart.setRestaurant(dish.getRestaurant());
+        } else if (cart.getRestaurant() != dish.getRestaurant()) {
             throw new Exception(
                     "You can only add dishes from the same restaurant, please clear your cart first");
         }
