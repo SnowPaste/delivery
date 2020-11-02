@@ -23,7 +23,6 @@ public class MongoDBRepository<T extends Model> implements GenericRepository<T> 
         collection = mongoDatabase.getCollection(clazz.getSimpleName(), clazz);
     }
 
-
     @Nullable
     public T get(ObjectId id) {
         return collection.find(eq("id", id)).first();

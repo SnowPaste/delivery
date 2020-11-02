@@ -41,7 +41,7 @@ public class CartController {
         defaultCustomer.setFirstName("Cindy");
         defaultCustomer.setEmail("cindy@mail.com");
         defaultCustomer.setPassWord("12345");
-        // defaultCart1.setCustomer(defaultCustomer);
+        defaultCart1.setCustomer(defaultCustomer);
         defaultCart1.setRestaurant(defaultRestaurant);
 
         // try {
@@ -172,8 +172,7 @@ public class CartController {
         cart.setTip(tip);
     }
 
-    public void addDish(@Nonnull Dish dish, @Nonnull Cart cart)
-            throws Exception {
+    public void addDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > addDish({})", dish.getId());
         // if (dishes.get(dish.getId()) == null) {
         //     throw new Exception("Dish doesn't exists");
