@@ -17,7 +17,9 @@ public class Restaurant implements Model {
         BRITISH,
         INDIAN,
         THAI,
-        MEXICAN
+        MEXICAN,
+        AMERICAN,
+        FRENCH
     }
 
     //    private Integer ID;

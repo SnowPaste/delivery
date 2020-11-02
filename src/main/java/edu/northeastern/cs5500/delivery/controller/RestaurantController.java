@@ -2,11 +2,14 @@ package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.Address;
 import edu.northeastern.cs5500.delivery.model.Dish;
+import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import edu.northeastern.cs5500.delivery.repository.RepositoryModule;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -18,6 +21,11 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class RestaurantController {
     private final GenericRepository<Restaurant> restaurants;
+    private static final RepositoryModule repositoryModule = new RepositoryModule();
+
+    @Inject
+    DriverController driverController =
+            new DriverController(repositoryModule.provideDriverRepository());
 
     @Inject
     RestaurantController(GenericRepository<Restaurant> RestaurantRepository) {
@@ -106,5 +114,15 @@ public class RestaurantController {
     public void deleteRestaurant(@Nonnull ObjectId id) throws Exception {
         log.debug("RestaurantController > deleteRestaurant(...)");
         restaurants.delete(id);
+    }
+
+    public void finishOrder(@Nonnull Order order) throws Exception {
+        log.debug("RestaurantController > finishingOrder(...)");
+        if (OrderController.getOrderStatus(order) == Order.Status.PROCESSING) {
+            OrderController.setOrderStatusToPreparing(order);
+            TimeUnit.SECONDS.sleep(3);
+            OrderController.setOrderStatusToWaiting(order);
+            driverController.takeAnOrder(order, order.getDriver());
+        }
     }
 }
