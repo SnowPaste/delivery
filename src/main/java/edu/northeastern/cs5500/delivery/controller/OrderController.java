@@ -4,6 +4,7 @@ import edu.northeastern.cs5500.delivery.model.*;
 import edu.northeastern.cs5500.delivery.model.Order.Status;
 import edu.northeastern.cs5500.delivery.repository.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,7 +17,7 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class OrderController {
     private final GenericRepository<Order> orders;
-    private final RepositoryModule repositoryModule = new RepositoryModule();
+    private static final RepositoryModule repositoryModule = new RepositoryModule();
 
     @Inject
     DriverController driverController =
@@ -36,23 +37,23 @@ public class OrderController {
             return;
         }
 
-        log.info("OrderController > construct > adding default order");
+        // log.info("OrderController > construct > adding default order");
 
-        final Order defaultOrder = new Order();
-        final Customer defaultCustomer = new Customer();
-        final Cart defaultCart = new Cart();
-        defaultCustomer.setFirstName("Jane");
-        defaultCustomer.setLastName("Doe");
-        defaultCart.setCustomer(defaultCustomer);
-        defaultOrder.setCreateTime(LocalDateTime.now());
-        defaultOrder.setCustomer(defaultCustomer);
-        defaultOrder.setCart(defaultCart);
+        // final Order defaultOrder = new Order();
+        // final Customer defaultCustomer = new Customer();
+        // final Cart defaultCart = new Cart();
+        // defaultCustomer.setFirstName("Jane");
+        // defaultCustomer.setLastName("Doe");
+        // defaultCart.setCustomer(defaultCustomer);
+        // defaultOrder.setCreateTime(LocalDateTime.now());
+        // defaultOrder.setCustomer(defaultCustomer);
+        // defaultOrder.setCart(defaultCart);
 
         // try {
-        //     addOrder(defaultOrder);
+        // addOrder(defaultOrder);
         // } catch (Exception e) {
-        //     log.error("OrderController > construct > adding default order > failure>");
-        //     e.printStackTrace();
+        // log.error("OrderController > construct > adding default order > failure>");
+        // e.printStackTrace();
         // }
     }
 
@@ -91,17 +92,72 @@ public class OrderController {
         orders.delete(id);
     }
 
-    public Status getOrderStatus(@Nonnull Order order) {
+    public static Status getOrderStatus(@Nonnull Order order) {
         return order.getStatus();
     }
 
+    /** Calculate the order est deliver time */
     public LocalDateTime getOrderEstDeliverTime(@Nonnull Order order) throws Exception {
-        LocalDateTime est = order.getCreateTime().plusHours(1);
-        order.setEstDeliverTime(est);
-        updateOrder(order);
+        if (order.getCreateTime() == null) {
+            throw new Exception("Your order has not been created yet...");
+        }
+        if (order.getEstDeliverTime() == null) {
+            LocalDateTime est = order.getCreateTime().plusHours(1);
+            order.setEstDeliverTime(est);
+        }
+        System.out.println(
+                "The estimated deliver time is "
+                        + order.getEstDeliverTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+
+        // updateOrder(order);
         return order.getEstDeliverTime();
     }
 
+    /** Set order status to PROCESSING */
+    public void setOrderStatusToProcessing(@Nonnull Order order) {
+        order.setStatus(Status.PROCESSING);
+        System.out.println("Your order is being processed...");
+    }
+
+    /** Set order status to PREPARING */
+    public static void setOrderStatusToPreparing(@Nonnull Order order) {
+        order.setStatus(Status.PREPARING);
+        System.out.println(
+                "Your order is being prepared by " + order.getRestaurant().getName() + " ...");
+    }
+
+    /** Set order status to WAITING_FOR_DRIVER */
+    public static void setOrderStatusToWaiting(@Nonnull Order order) {
+        order.setStatus(Status.WAITING_FOR_DRIVER);
+        System.out.println("Your order is ready and waiting for driver...");
+    }
+
+    /** Set order status to PICKED_UP */
+    public static void setOrderStatusToPickedUp(@Nonnull Order order) {
+        order.setStatus(Status.PICKED_UP);
+        System.out.println("Your order has been picked up by driver...");
+    }
+
+    /** Set order status to DELIVERED */
+    public static void setOrderStatusToDelivered(@Nonnull Order order) {
+        order.setStatus(Status.DELIVERED);
+    }
+
+    /** Set order status to CANCELLED */
+    public static void setOrderStatusToCancelled(@Nonnull Order order) {
+        order.setStatus(Status.CANCELLED);
+        System.out.println("Your order has been cancelled...");
+    }
+
+    /** Assign the given driver to the order */
+    public void setOrderDriver(@Nonnull Order order, @Nonnull Driver driver) {
+        order.setDriver(driver);
+        System.out.println(
+                "Assigned driver " + driver.getFirstName() + " for order " + order.getId());
+        ;
+    }
+
+    /** Find an available driver for the order */
     private void assignDriver(@Nonnull Order order) throws Exception {
         Driver assigned_driver = null;
         for (Driver d : driverController.getDrivers()) {
@@ -111,24 +167,18 @@ public class OrderController {
             }
         }
         if (assigned_driver != null) {
-            order.setDriver(assigned_driver);
-            System.out.println(
-                    "Assigned driver "
-                            + assigned_driver.getFirstName()
-                            + " for order "
-                            + order.getId());
-            // log.info("Assigned driver {} for order {}",
-            // assigned_driver.getFirstName(),order.getId());
+            setOrderDriver(order, assigned_driver);
         } else {
-            System.out.println("No available driver");
             throw new Exception("No available driver");
         }
     }
 
+    /** Notify restaurant about the order */
     private void notifyRestaurant(@Nonnull Order order) throws Exception {
         restaurantController.finishOrder(order);
     }
 
+    /** Place an order with the given cart */
     public Order makeOrder(@Nonnull Cart cart) throws Exception {
         try {
             Order order = new Order();
@@ -139,22 +189,15 @@ public class OrderController {
             order.setCreateTime(LocalDateTime.now());
             System.out.println(
                     "Order was placed at "
-                            + order.getCreateTime().getHour()
-                            + ":"
-                            + order.getCreateTime().getMinute());
+                            + order.getCreateTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+
             getOrderEstDeliverTime(order);
-            System.out.println(
-                    "The estimated deliver time is "
-                            + order.getEstDeliverTime().getHour()
-                            + ":"
-                            + order.getEstDeliverTime().getMinute());
+
             assignDriver(order);
-            System.out.println(
-                    "The driver assigned for this order is " + order.getDriver().getFirstName());
-            order.setStatus(Status.PROCESSING);
+
             System.out.println("Order placed successfully!");
-            System.out.println(
-                    "Restaurant " + order.getRestaurant().getName() + " is preparing your order");
+            setOrderStatusToProcessing(order);
+
             notifyRestaurant(order);
             return order;
         } catch (Exception e) {
@@ -164,25 +207,24 @@ public class OrderController {
         return null;
     }
 
+    /** Cancel order */
     public void cancelOrder(@Nonnull Order order) throws Exception {
         if (order.getStatus() != Status.PROCESSING) {
             throw new Exception(
                     "The restaurant has started preparing your order, your order can't be cancelled");
         } else {
-            order.setStatus(Status.CANCELLED);
-            notifyRestaurant(order);
-            driverController.manageCompletedOrder(order.getDriver(), order);
+            setOrderStatusToCancelled(order);
             System.out.println("Your order has been cancelled");
         }
     }
 
     public void completeOrder(@Nonnull Order order) throws Exception {
         driverController.manageCompletedOrder(order.getDriver(), order);
+        setOrderStatusToDelivered(order);
         notifyCustomer(order);
-        System.out.println("The order has completed");
     }
 
     private void notifyCustomer(@Nonnull Order order) {
-        System.out.println("Your order " + order.getId() + " has been delivered, enjoy!");
+        System.out.println("Your order " + order.getId() + " has been delivered! Enjoy:)");
     }
 }
