@@ -2,7 +2,7 @@ package edu.northeastern.cs5500.delivery.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -28,9 +28,10 @@ public class Restaurant implements Model {
     private String name;
     private Address address;
     private String phone;
-    private LocalDateTime startDeliverTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private Cuisine cuisine;
-    private LinkedList<Dish> menu;
+    private ArrayList<Dish> menu;
     private Double rating;
 
     /** @return true if this restaurant is valid */

@@ -2,6 +2,7 @@ package edu.northeastern.cs5500.delivery.controller;
 
 import edu.northeastern.cs5500.delivery.model.Customer;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import edu.northeastern.cs5500.delivery.repository.RepositoryModule;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -14,9 +15,13 @@ import org.bson.types.ObjectId;
 @Slf4j
 public class CustomerController {
     private final GenericRepository<Customer> customers;
+    RepositoryModule repositoryModule = new RepositoryModule();
 
     @Inject
-    CustomerController(GenericRepository<Customer> customerRepository) {
+    CartController cartController = new CartController(repositoryModule.provideCartRepository());
+
+    @Inject
+    public CustomerController(GenericRepository<Customer> customerRepository) {
         customers = customerRepository;
 
         log.info("CustomerController > construct");
@@ -50,6 +55,8 @@ public class CustomerController {
             throw new Exception("DuplicateKeyException");
         }
 
+        cartController.addCart(customer.getCart());
+        System.out.println(cartController.getCarts().size());
         return customers.add(customer);
     }
 

@@ -1,14 +1,12 @@
 package edu.northeastern.cs5500.delivery.controller;
 
-import edu.northeastern.cs5500.delivery.model.Address;
-import edu.northeastern.cs5500.delivery.model.Dish;
-import edu.northeastern.cs5500.delivery.model.Order;
-import edu.northeastern.cs5500.delivery.model.Restaurant;
-import edu.northeastern.cs5500.delivery.repository.GenericRepository;
+import edu.northeastern.cs5500.delivery.model.*;
+import edu.northeastern.cs5500.delivery.repository.*;
 import edu.northeastern.cs5500.delivery.repository.RepositoryModule;
+import edu.northeastern.cs5500.delivery.service.MongoDBService;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,13 +20,14 @@ import org.bson.types.ObjectId;
 public class RestaurantController {
     private final GenericRepository<Restaurant> restaurants;
     private static final RepositoryModule repositoryModule = new RepositoryModule();
+    private static final MongoDBService mongoDBService = new MongoDBService();
 
     @Inject
     DriverController driverController =
-            new DriverController(repositoryModule.provideDriverRepository());
+            new DriverController(repositoryModule.provideDriverRepository(mongoDBService));
 
     @Inject
-    RestaurantController(GenericRepository<Restaurant> RestaurantRepository) {
+    public RestaurantController(GenericRepository<Restaurant> RestaurantRepository) {
         restaurants = RestaurantRepository;
 
         log.info("RestaurantController > construct");
@@ -44,7 +43,7 @@ public class RestaurantController {
         defaultRestaurant1.setEmailAddress("lcd@gmail.com");
         defaultRestaurant1.setCuisine(Restaurant.Cuisine.INDIAN);
 
-        LinkedList<Dish> menu1 = new LinkedList<>();
+        ArrayList<Dish> menu1 = new ArrayList<>();
         final Dish defaultDish1 = new Dish();
         defaultDish1.setName("Hot dog");
         defaultDish1.setPrice(5.00);
@@ -54,7 +53,7 @@ public class RestaurantController {
         defaultRestaurant1.setPhone("206-779-9780");
 
         final LocalDateTime t1 = LocalDateTime.now();
-        defaultRestaurant1.setStartDeliverTime(t1);
+        defaultRestaurant1.setStartTime(t1);
 
         final Address a1 = new Address();
         defaultRestaurant1.setAddress(a1);

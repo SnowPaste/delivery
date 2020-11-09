@@ -8,7 +8,6 @@ import org.bson.types.ObjectId;
 public class Dish implements Model {
     private ObjectId id;
     private String name;
-    private Restaurant restaurant;
     private String description;
     private String picture;
     private Double price;

@@ -3,8 +3,10 @@ package edu.northeastern.cs5500.delivery.controller;
 import edu.northeastern.cs5500.delivery.model.*;
 import edu.northeastern.cs5500.delivery.model.Order.Status;
 import edu.northeastern.cs5500.delivery.repository.*;
+import edu.northeastern.cs5500.delivery.service.MongoDBService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -18,14 +20,15 @@ import org.bson.types.ObjectId;
 public class OrderController {
     private final GenericRepository<Order> orders;
     private static final RepositoryModule repositoryModule = new RepositoryModule();
+    private static final MongoDBService mongoDBService = new MongoDBService();
 
     @Inject
     DriverController driverController =
-            new DriverController(repositoryModule.provideDriverRepository());
+            new DriverController(repositoryModule.provideDriverRepository(mongoDBService));
 
     @Inject
     RestaurantController restaurantController =
-            new RestaurantController(repositoryModule.provideRestaurantRepository());
+            new RestaurantController(repositoryModule.provideRestaurantRepository(mongoDBService));
 
     @Inject
     public OrderController(GenericRepository<Order> orderRepository) {
@@ -37,24 +40,31 @@ public class OrderController {
             return;
         }
 
-        // log.info("OrderController > construct > adding default order");
+        log.info("OrderController > construct > adding default order");
 
-        // final Order defaultOrder = new Order();
-        // final Customer defaultCustomer = new Customer();
-        // final Cart defaultCart = new Cart();
-        // defaultCustomer.setFirstName("Jane");
-        // defaultCustomer.setLastName("Doe");
-        // defaultCart.setCustomer(defaultCustomer);
-        // defaultOrder.setCreateTime(LocalDateTime.now());
-        // defaultOrder.setCustomer(defaultCustomer);
-        // defaultOrder.setCart(defaultCart);
+        final Order defaultOrder = new Order();
+        final Customer defaultCustomer = new Customer();
+        final Cart defaultCart = defaultCustomer.getCart();
+        final Restaurant defaulRestaurant = restaurantController.getRestaurants().iterator().next();
+        final Dish defaultDish = defaulRestaurant.getMenu().get(0);
+        final Driver defaultDriver = driverController.getDrivers().iterator().next();
+        defaultCustomer.setFirstName("Jane");
+        defaultCustomer.setLastName("Doe");
+        ArrayList<Dish> select = new ArrayList<>();
+        select.add(defaultDish);
+        defaultCart.setItems(select);
+        defaultOrder.setCreateTime(LocalDateTime.now());
+        defaultOrder.setCustomer(defaultCustomer);
+        defaultOrder.setCart(defaultCart);
+        defaultOrder.setRestaurant(defaulRestaurant);
+        defaultOrder.setDriver(defaultDriver);
 
-        // try {
-        // addOrder(defaultOrder);
-        // } catch (Exception e) {
-        // log.error("OrderController > construct > adding default order > failure>");
-        // e.printStackTrace();
-        // }
+        try {
+            addOrder(defaultOrder);
+        } catch (Exception e) {
+            log.error("OrderController > construct > adding default order > failure>");
+            e.printStackTrace();
+        }
     }
 
     @Nullable
@@ -179,12 +189,13 @@ public class OrderController {
     }
 
     /** Place an order with the given cart */
-    public Order makeOrder(@Nonnull Cart cart) throws Exception {
+    public Order makeOrder(@Nonnull Customer customer, @Nonnull Restaurant restaurant)
+            throws Exception {
         try {
             Order order = new Order();
-            order.setRestaurant(cart.getRestaurant());
-            order.setCart(cart);
-            order.setCustomer(cart.getCustomer());
+            order.setRestaurant(restaurant);
+            order.setCart(customer.getCart());
+            order.setCustomer(customer);
 
             order.setCreateTime(LocalDateTime.now());
             System.out.println(
@@ -192,12 +203,9 @@ public class OrderController {
                             + order.getCreateTime().format(DateTimeFormatter.ofPattern("HH:mm")));
 
             getOrderEstDeliverTime(order);
-
             assignDriver(order);
-
             System.out.println("Order placed successfully!");
             setOrderStatusToProcessing(order);
-
             notifyRestaurant(order);
             return order;
         } catch (Exception e) {
@@ -214,6 +222,7 @@ public class OrderController {
                     "The restaurant has started preparing your order, your order can't be cancelled");
         } else {
             setOrderStatusToCancelled(order);
+            updateOrder(order);
             System.out.println("Your order has been cancelled");
         }
     }
@@ -222,9 +231,10 @@ public class OrderController {
         driverController.manageCompletedOrder(order.getDriver(), order);
         setOrderStatusToDelivered(order);
         notifyCustomer(order);
+        addOrder(order);
     }
 
     private void notifyCustomer(@Nonnull Order order) {
-        System.out.println("Your order " + order.getId() + " has been delivered! Enjoy:)");
+        System.out.println("Your order has been delivered! Enjoy:)");
     }
 }
