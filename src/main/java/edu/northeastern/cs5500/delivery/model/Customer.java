@@ -14,8 +14,8 @@ public class Customer implements Model {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private ArrayList<Order> orderHistory;
-    private Cart cart;
+    private ArrayList<ObjectId> orderHistory;
+    private Cart cart = new Cart();
     private ArrayList<Address> addressList;
     private ArrayList<CreditCard> creditCards;
 
