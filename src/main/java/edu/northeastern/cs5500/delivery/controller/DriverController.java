@@ -24,6 +24,10 @@ public class DriverController {
 
         log.info("DriverController > construct");
 
+        if (drivers.count() > 0) {
+            return;
+        }
+
         final Driver defaultDriver = new Driver();
         defaultDriver.setFirstName("Jane");
         defaultDriver.setLastName("Doe");
@@ -90,8 +94,8 @@ public class DriverController {
     public boolean takeAnOrder(@Nonnull Order order, @Nonnull Driver driver) throws Exception {
         log.debug("DriverController > takeAnOrder(...)");
         if (canTakeMoreOrder(driver)) {
-            ArrayList<Order> orderList = driver.getCurrOrders();
-            orderList.add(order);
+            ArrayList<ObjectId> orderList = driver.getCurrOrders();
+            orderList.add(order.getId());
             driver.setCurrOrders(orderList);
             OrderController.setOrderStatusToPickedUp(order);
             if (driver.getCurrOrders().size() < driver.getMaxOrderNum()) {
@@ -121,8 +125,8 @@ public class DriverController {
             throws Exception {
         log.debug("DriverController > popOutCompletedOrder(...)");
 
-        driver.getCurrOrders().remove(order);
-        driver.getCompleteOrders().add(order);
+        driver.getCurrOrders().remove(order.getId());
+        driver.getCompleteOrders().add(order.getId());
         if (driver.getCurrOrders().size() < driver.getMaxOrderNum()) {
             driver.setAvailable(true);
         } else {

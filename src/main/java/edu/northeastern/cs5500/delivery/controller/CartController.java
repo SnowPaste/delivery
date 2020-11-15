@@ -3,6 +3,7 @@ package edu.northeastern.cs5500.delivery.controller;
 import edu.northeastern.cs5500.delivery.model.*;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import edu.northeastern.cs5500.delivery.repository.RepositoryModule;
+import edu.northeastern.cs5500.delivery.service.MongoDBService;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.annotation.Nonnull;
@@ -16,12 +17,14 @@ import org.bson.types.ObjectId;
 public class CartController {
     private final GenericRepository<Cart> carts;
     private final RepositoryModule repositoryModule = new RepositoryModule();
+    private static final MongoDBService mongoDBService = new MongoDBService();
     private final Double DEFAULT_TIP_RATE = 0.2;
     private final Double INIT_PRICE = 0.0;
     private final Double INIT_TIP = 0.0;
 
     @Inject
-    DishController dishController = new DishController(repositoryModule.provideDishRepository());
+    DishController dishController =
+            new DishController(repositoryModule.provideDishRepository(mongoDBService));
 
     @Inject
     public CartController(GenericRepository<Cart> cartRepository) {
@@ -33,16 +36,15 @@ public class CartController {
             return;
         }
 
-        log.info("CartController > construct > adding default carts");
+        // log.info("CartController > construct > adding default carts");
 
-        final Cart defaultCart1 = new Cart();
-        final Customer defaultCustomer = new Customer();
-        final Restaurant defaultRestaurant = new Restaurant();
-        defaultCustomer.setFirstName("Cindy");
-        defaultCustomer.setEmail("cindy@mail.com");
-        defaultCustomer.setPassWord("12345");
-        defaultCart1.setCustomer(defaultCustomer);
-        defaultCart1.setRestaurant(defaultRestaurant);
+        // final Cart defaultCart1 = new Cart();
+        // final Customer defaultCustomer = new Customer();
+        // final Restaurant defaultRestaurant = new Restaurant();
+        // defaultCustomer.setFirstName("Cindy");
+        // defaultCustomer.setEmail("cindy@mail.com");
+        // defaultCustomer.setPassWord("12345");
+        // defaultCart1.setRestaurant(defaultRestaurant);
 
         // try {
         //     addCart(defaultCart1);
@@ -105,11 +107,6 @@ public class CartController {
         return id;
     }
 
-    // public Customer getCartOwner(@Nonnull Cart cart) throws Exception {
-    //     log.debug("CartController > getCartOwner(...)");
-    //     return cart.getCustomer();
-    // }
-
     public ArrayList<Dish> getCartItems(@Nonnull Cart cart) throws Exception {
         log.debug("CartController > getCartItems(...)");
         return cart.getItems();
@@ -151,7 +148,7 @@ public class CartController {
         return rawPrice * DEFAULT_TIP_RATE;
     }
 
-    private void calculateTotalPrice(@Nonnull Cart cart) {
+    private Double calculateTotalPrice(@Nonnull Cart cart) {
         log.debug("CartController > calculateTotalPrice(...)");
         Double total = calculateRawPrice(cart);
         if (cart.getTip() == null) {
@@ -161,6 +158,7 @@ public class CartController {
             total += cart.getTip();
         }
         cart.setTotalPrice(total);
+        return total;
     }
 
     public void setCartTip(@Nonnull Cart cart, Double tip) {
@@ -174,30 +172,20 @@ public class CartController {
 
     public void addDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > addDish({})", dish.getId());
-        // if (dishes.get(dish.getId()) == null) {
+        // if (dishController.getDish(dish.getId()) == null) {
         //     throw new Exception("Dish doesn't exists");
         // }
-        // if (carts.get(cart.getId()) == null || cart.getId() == null) {
-        //     throw new Exception("Cart doesn't exists");
-        // }
-        if (cart.getRestaurant() == null) {
-            cart.setRestaurant(dish.getRestaurant());
-        } else if (cart.getRestaurant() != dish.getRestaurant()) {
-            throw new Exception(
-                    "You can only add dishes from the same restaurant, please clear your cart first");
-        }
+
         cart.getItems().add(dish);
+        cart.setTotalPrice(calculateTotalPrice(cart));
         // updateCart(cart);
         System.out.println("Dish " + dish.getName() + " is added");
     }
 
     public void removeDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > removeDish({})", dish.getId());
-        // if (dishes.get(dish.getId()) == null) {
+        // if (dishController.getDish(dish.getId()) == null) {
         //     throw new Exception("Dish doesn't exists");
-        // }
-        // if (carts.get(cart.getId()) == null || cart.getId() == null) {
-        //     throw new Exception("Cart doesn't exists");
         // }
 
         if (!cart.getItems().contains(dish)) {
@@ -205,17 +193,16 @@ public class CartController {
         }
 
         cart.getItems().remove(dish);
+        cart.setTotalPrice(calculateTotalPrice(cart));
         System.out.println("Dish " + dish.getName() + " is removed");
         if (cart.getItems().isEmpty()) {
-            cart.setRestaurant(null);
             System.out.println("Your cart is now empty!");
         }
         // updateCart(cart);
     }
 
     public void emptyCart(@Nonnull Cart cart) throws Exception {
-        cart.setItems(new ArrayList<Dish>());
-        cart.setRestaurant(null);
+        cart = new Cart();
         // updateCart(cart);
         System.out.println("Cart has been cleared");
     }
