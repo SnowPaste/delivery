@@ -20,6 +20,18 @@ public class ViewModule {
 
     @Provides
     @IntoSet
+    public View provideDriverView(DriverView driverView) {
+        return driverView;
+    }
+
+    @Provides
+    @IntoSet
+    public View provideOrderView(OrderView orderView) {
+        return orderView;
+    }
+
+    @Provides
+    @IntoSet
     public View provideDishView(DishView dishView) {
         return dishView;
     }

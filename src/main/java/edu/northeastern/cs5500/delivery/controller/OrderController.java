@@ -46,6 +46,7 @@ public class OrderController {
         final Customer defaultCustomer = new Customer();
         final Cart defaultCart = defaultCustomer.getCart();
         final Restaurant defaulRestaurant = restaurantController.getRestaurants().iterator().next();
+        //        System.out.println(defaulRestaurant);
         final Dish defaultDish = defaulRestaurant.getMenu().get(0);
         final Driver defaultDriver = driverController.getDrivers().iterator().next();
         defaultCustomer.setFirstName("Jane");
@@ -58,6 +59,7 @@ public class OrderController {
         defaultOrder.setCart(defaultCart);
         defaultOrder.setRestaurant(defaulRestaurant);
         defaultOrder.setDriver(defaultDriver);
+        defaultOrder.setStatus(Status.PROCESSING);
 
         try {
             addOrder(defaultOrder);

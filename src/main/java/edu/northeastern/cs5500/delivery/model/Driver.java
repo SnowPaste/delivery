@@ -17,10 +17,10 @@ public class Driver implements Model {
     private String carMaker;
     private String carModel;
     private String carLicence;
-    private double rate;
+    private double rate = 5.0;
     private ArrayList<ObjectId> completeOrders = new ArrayList<ObjectId>();
     private ArrayList<ObjectId> currOrders = new ArrayList<ObjectId>();
-    private int maxOrderNum;
+    private int maxOrderNum = 10;
 
     /** @return true if this delivery is valid */
     @JsonIgnore
