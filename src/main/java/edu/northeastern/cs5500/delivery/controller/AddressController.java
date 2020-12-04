@@ -16,7 +16,7 @@ public class AddressController {
     private final GenericRepository<Address> addresses;
 
     @Inject
-    AddressController(GenericRepository<Address> addressRepository) {
+    public AddressController(GenericRepository<Address> addressRepository) {
         addresses = addressRepository;
 
         log.info("AddressController > construct");

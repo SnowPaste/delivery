@@ -161,49 +161,51 @@ public class CartController {
         return total;
     }
 
-    public void setCartTip(@Nonnull Cart cart, Double tip) {
+    public Cart setCartTip(@Nonnull Cart cart, Double tip) throws Exception {
         log.debug("CartController > setCartTip({})", tip);
         if (tip == null) {
             cart.setTip(calculateDefaultTip(cart));
-            return;
+            return cart;
         }
         cart.setTip(tip);
+        cart.setTotalPrice(calculateTotalPrice(cart));
+        updateCart(cart);
+        return cart;
     }
 
     public void addDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > addDish({})", dish.getId());
-        // if (dishController.getDish(dish.getId()) == null) {
-        //     throw new Exception("Dish doesn't exists");
-        // }
+        if (dishController.getDish(dish.getId()) == null) {
+            throw new Exception("Dish doesn't exists");
+        }
 
         cart.getItems().add(dish);
         cart.setTotalPrice(calculateTotalPrice(cart));
-        // updateCart(cart);
+        updateCart(cart);
         System.out.println("Dish " + dish.getName() + " is added");
     }
 
     public void removeDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > removeDish({})", dish.getId());
-        // if (dishController.getDish(dish.getId()) == null) {
-        //     throw new Exception("Dish doesn't exists");
-        // }
-
-        if (!cart.getItems().contains(dish)) {
-            throw new Exception("Dish is not in the Cart");
+        if (dishController.getDish(dish.getId()) == null) {
+            throw new Exception("Dish doesn't exists");
         }
 
-        cart.getItems().remove(dish);
-        cart.setTotalPrice(calculateTotalPrice(cart));
+        if (cart.getItems().contains(dish)) {
+            cart.getItems().remove(dish);
+            cart.setTotalPrice(calculateTotalPrice(cart));
+        }
         System.out.println("Dish " + dish.getName() + " is removed");
         if (cart.getItems().isEmpty()) {
             System.out.println("Your cart is now empty!");
         }
-        // updateCart(cart);
+        updateCart(cart);
     }
 
-    public void emptyCart(@Nonnull Cart cart) throws Exception {
+    public Cart emptyCart(@Nonnull Cart cart) throws Exception {
         cart = new Cart();
-        // updateCart(cart);
+        updateCart(cart);
         System.out.println("Cart has been cleared");
+        return cart;
     }
 }
