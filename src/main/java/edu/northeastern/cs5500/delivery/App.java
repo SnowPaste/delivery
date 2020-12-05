@@ -6,7 +6,6 @@ import edu.northeastern.cs5500.delivery.controller.*;
 import edu.northeastern.cs5500.delivery.model.*;
 import edu.northeastern.cs5500.delivery.repository.*;
 import edu.northeastern.cs5500.delivery.service.MongoDBService;
-import edu.northeastern.cs5500.delivery.*;
 
 public class App {
     static RepositoryModule repositoryModule = new RepositoryModule();
@@ -71,8 +70,7 @@ public class App {
                     String accessControlRequestMethod =
                             request.headers("Access-Control-Request-Method");
                     if (accessControlRequestMethod != null) {
-                        response.header("Access-Control-Allow-Methods",
-        accessControlRequestMethod);
+                        response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
                     }
 
                     return "OK";

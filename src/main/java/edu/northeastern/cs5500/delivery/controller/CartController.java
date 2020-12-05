@@ -84,17 +84,11 @@ public class CartController {
 
     public void updateCart(@Nonnull Cart cart) throws Exception {
         log.debug("CartController > updateCart(...)");
-        if (carts.get(cart.getId()) == null) {
-            throw new Exception("Cart doesn't exist, please addCart first");
-        }
         carts.update(cart);
     }
 
     public void deleteCart(@Nonnull ObjectId id) throws Exception {
         log.debug("CartController > deleteCart(...)");
-        if (carts.get(id) == null) {
-            throw new Exception("Cart doesn't exists");
-        }
         carts.delete(id);
     }
 
@@ -173,19 +167,17 @@ public class CartController {
         return cart;
     }
 
-    public void addDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
+    public Cart addDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > addDish({})", dish.getId());
-        if (dishController.getDish(dish.getId()) == null) {
-            throw new Exception("Dish doesn't exists");
-        }
 
         cart.getItems().add(dish);
         cart.setTotalPrice(calculateTotalPrice(cart));
         updateCart(cart);
         System.out.println("Dish " + dish.getName() + " is added");
+        return cart;
     }
 
-    public void removeDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
+    public Cart removeDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > removeDish({})", dish.getId());
         if (dishController.getDish(dish.getId()) == null) {
             throw new Exception("Dish doesn't exists");
@@ -200,6 +192,7 @@ public class CartController {
             System.out.println("Your cart is now empty!");
         }
         updateCart(cart);
+        return cart;
     }
 
     public Cart emptyCart(@Nonnull Cart cart) throws Exception {

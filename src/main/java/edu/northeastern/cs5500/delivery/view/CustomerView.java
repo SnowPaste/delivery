@@ -7,6 +7,7 @@ import static spark.Spark.post;
 import static spark.Spark.put;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import edu.northeastern.cs5500.delivery.JsonTransformer;
 import edu.northeastern.cs5500.delivery.controller.*;
 import edu.northeastern.cs5500.delivery.model.*;
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+
 
 @Singleton
 @Slf4j
@@ -144,12 +146,8 @@ public class CustomerView implements View {
                     }
 
                     address.setId(old_address.getId());
-                    addressController.updateAddress(address);
-                    ArrayList<Address> addressList = customer.getAddressList();
-                    addressList.remove(old_address);
-                    addressList.add(address);
-                    customer.setAddressList(addressList);
-                    customerController.updateCustomer(customer);
+                    customerController.updateAddress(customer, address);
+                    response.type("application/json");
                     return address;
                 });
 
@@ -203,12 +201,8 @@ public class CustomerView implements View {
                     }
 
                     card.setId(old_card.getId());
-                    cardController.updateCreditCard(card);
-                    ArrayList<CreditCard> cardList = customer.getCreditCards();
-                    cardList.remove(old_card);
-                    cardList.add(card);
-                    customer.setCreditCards(cardList);
-                    customerController.updateCustomer(customer);
+                    customerController.updateCard(customer, card);
+                    response.type("application/json");
                     return card;
                 });
 
@@ -253,10 +247,10 @@ public class CustomerView implements View {
                         cartController.addCart(cart);
                     }
 
-                    cartController.addDish(dish, cart);
-                    customer.setCart(cart);
+                    Cart newCart = cartController.addDish(dish, cart);
+                    customer.setCart(newCart);
                     customerController.updateCustomer(customer);
-                    return cart;
+                    return newCart;
                 });
 
         put(
@@ -278,10 +272,10 @@ public class CustomerView implements View {
                     }
 
                     Cart cart = customer.getCart();
-                    cartController.removeDish(dish, cart);
-                    customer.setCart(cart);
+                    Cart newCart = cartController.removeDish(dish, cart);
+                    customer.setCart(newCart);
                     customerController.updateCustomer(customer);
-                    return cart;
+                    return newCart;
                 });
 
         put(
@@ -347,7 +341,8 @@ public class CustomerView implements View {
                     final String customer_param_id = request.params(":customer_id");
                     final ObjectId customer_id = new ObjectId(customer_param_id);
                     ObjectMapper mapper = new ObjectMapper();
-                    final Double tip = mapper.readValue(request.body(), Double.class);
+                    Cart tempCart = mapper.readValue(request.body(), Cart.class);
+                    Double tip = tempCart.getTip();
                     Customer customer = customerController.getCustomer(customer_id);
                     if (customer == null) {
                         halt(404);
