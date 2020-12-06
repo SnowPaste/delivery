@@ -30,28 +30,28 @@ public class App {
     public static void main(String[] arg) throws Exception {
         System.out.println("--------------Welcome to SnowPaste Delivery-------------");
 
-        //        Restaurant restaurant = (Restaurant)
-        // restaurantController.getRestaurants().toArray()[0];
-        //        Dish dish1 = restaurant.getMenu().get(0);
-        //        Dish dish2 = restaurant.getMenu().get(1);
-        //
-        //        Customer customer = (Customer) customerController.getCustomers().toArray()[0];
-        //        customer.setCart(new Cart());
-        //
-        //        cartController.addCart(customer.getCart());
-        //        Cart cart = customer.getCart();
-        //
-        //        cartController.addDish(dish1, cart);
-        //        TimeUnit.SECONDS.sleep(1);
-        //        cartController.removeDish(dish1, cart);
-        //        TimeUnit.SECONDS.sleep(1);
-        //        cartController.addDish(dish1, cart);
-        //        TimeUnit.SECONDS.sleep(1);
-        //        cartController.addDish(dish2, cart);
-        //        TimeUnit.SECONDS.sleep(1);
-        //        Order order = orderController.makeOrder(customer, restaurant);
-        //        TimeUnit.SECONDS.sleep(3);
-        //        orderController.completeOrder(order);
+
+        // Restaurant restaurant = (Restaurant) restaurantController.getRestaurants().toArray()[0];
+        // Dish dish1 = restaurant.getMenu().get(0);
+        // Dish dish2 = restaurant.getMenu().get(1);
+
+        // Customer customer = (Customer) customerController.getCustomers().toArray()[0];
+        // customer.setCart(new Cart());
+
+        // cartController.addCart(customer.getCart());
+        // Cart cart = customer.getCart();
+
+        // cartController.addDish(dish1, cart);
+        // TimeUnit.SECONDS.sleep(1);
+        // cartController.removeDish(dish1, cart);
+        // TimeUnit.SECONDS.sleep(1);
+        // cartController.addDish(dish1, cart);
+        // TimeUnit.SECONDS.sleep(1);
+        // cartController.addDish(dish2, cart);
+        // TimeUnit.SECONDS.sleep(1);
+        // Order order = orderController.makeOrder(customer, restaurant);
+        // TimeUnit.SECONDS.sleep(3);
+        // orderController.completeOrder(order);
 
         // run on port 5000
         port(getAssignedPort());
@@ -89,5 +89,6 @@ public class App {
         MongoDBService mongoDBService = new MongoDBService();
         OrderController orderController =
                 new OrderController(repositoryModule.provideOrderRepository(mongoDBService));
+
     }
 }
