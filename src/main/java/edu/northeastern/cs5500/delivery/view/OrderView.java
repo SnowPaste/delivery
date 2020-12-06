@@ -80,7 +80,7 @@ public class OrderView implements View {
         get( // get the estimated deliver time of an order
                 "/order/:order_id/get_order_est_deliver_time",
                 (request, response) -> {
-                    final String orderIdString = request.params(":order_id:");
+                    final String orderIdString = request.params(":order_id");
                     log.debug("/order/:order_id<{}>/get_order_est_deliver_time", orderIdString);
                     final ObjectId orderId = new ObjectId(orderIdString);
                     Order order = orderController.getOrder(orderId);
@@ -88,7 +88,7 @@ public class OrderView implements View {
                         halt(404);
                     }
                     response.type("application/json");
-                    return order.getDeliverTime().toString();
+                    return order.getEstDeliverTime().toString();
                 },
                 jsonTransformer);
 
@@ -103,10 +103,8 @@ public class OrderView implements View {
                         halt(404);
                     }
                     orderController.deleteOrder(orderId);
-                    response.type("application/json");
                     response.status(200);
                     return response;
-                },
-                jsonTransformer);
+                });
     }
 }

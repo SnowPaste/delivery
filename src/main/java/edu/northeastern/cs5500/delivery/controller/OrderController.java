@@ -45,11 +45,10 @@ public class OrderController {
         final Order defaultOrder = new Order();
         final Customer defaultCustomer = new Customer();
         final Cart defaultCart = defaultCustomer.getCart();
-        final Restaurant defaulRestaurant = restaurantController.getRestaurants().iterator().next();
-        //        System.out.println(defaulRestaurant);
-        final Dish defaultDish = defaulRestaurant.getMenu().get(0);
+        final Restaurant defaultRestaurant = restaurantController.getRestaurants().iterator().next();
+        final Dish defaultDish = defaultRestaurant.getMenu().get(0);
         final Driver defaultDriver = driverController.getDrivers().iterator().next();
-        defaultCustomer.setFirstName("Jane");
+        defaultCustomer.setFirstName("John");
         defaultCustomer.setLastName("Doe");
         ArrayList<Dish> select = new ArrayList<>();
         select.add(defaultDish);
@@ -57,12 +56,74 @@ public class OrderController {
         defaultOrder.setCreateTime(LocalDateTime.now());
         defaultOrder.setCustomer(defaultCustomer);
         defaultOrder.setCart(defaultCart);
-        defaultOrder.setRestaurant(defaulRestaurant);
+        defaultOrder.setRestaurant(defaultRestaurant);
         defaultOrder.setDriver(defaultDriver);
-        defaultOrder.setStatus(Status.PROCESSING);
+        defaultOrder.setEstDeliverTime(defaultOrder.getCreateTime().plusHours(1));
+        defaultOrder.setStatus(Status.WAITING_FOR_DRIVER);
+
+
+        final Order defaultOrder1 = new Order();
+        final Customer defaultCustomer1 = new Customer();
+        final Cart defaultCart1 = defaultCustomer.getCart();
+        final Restaurant defaultRestaurant1 = restaurantController.getRestaurants().iterator().next();
+        final Dish defaultDish1 = defaultRestaurant.getMenu().get(0);
+        final Driver defaultDriver1 = driverController.getDrivers().iterator().next();
+        defaultCustomer1.setFirstName("Jane");
+        defaultCustomer1.setLastName("Doe");
+        ArrayList<Dish> select1 = new ArrayList<>();
+        select1.add(defaultDish1);
+        defaultCart1.setItems(select1);
+        defaultOrder1.setCreateTime(LocalDateTime.now());
+        defaultOrder1.setCustomer(defaultCustomer1);
+        defaultOrder1.setCart(defaultCart1);
+        defaultOrder1.setRestaurant(defaultRestaurant1);
+        defaultOrder1.setDriver(defaultDriver1);
+        defaultOrder1.setEstDeliverTime(defaultOrder1.getCreateTime().plusHours(1));
+        defaultOrder1.setStatus(Status.PROCESSING);
+
+        final Order defaultOrder2 = new Order();
+        final Customer defaultCustomer2 = new Customer();
+        final Cart defaultCart2 = defaultCustomer.getCart();
+        final Restaurant defaultRestaurant2 = restaurantController.getRestaurants().iterator().next();
+        final Dish defaultDish2 = defaultRestaurant.getMenu().get(0);
+        final Driver defaultDriver2 = driverController.getDrivers().iterator().next();
+        defaultCustomer2.setFirstName("June");
+        defaultCustomer2.setLastName("Doe");
+        ArrayList<Dish> select2 = new ArrayList<>();
+        select2.add(defaultDish2);
+        defaultCart2.setItems(select2);
+        defaultOrder2.setCreateTime(LocalDateTime.now());
+        defaultOrder2.setCustomer(defaultCustomer2);
+        defaultOrder2.setCart(defaultCart2);
+        defaultOrder2.setRestaurant(defaultRestaurant2);
+        defaultOrder2.setDriver(defaultDriver2);
+        defaultOrder2.setEstDeliverTime(defaultOrder2.getCreateTime().plusHours(1));
+        defaultOrder2.setStatus(Status.PREPARING);
+
+        final Order defaultOrder3 = new Order();
+        final Customer defaultCustomer3 = new Customer();
+        final Cart defaultCart3 = defaultCustomer.getCart();
+        final Restaurant defaultRestaurant3 = restaurantController.getRestaurants().iterator().next();
+        final Dish defaultDish3 = defaultRestaurant.getMenu().get(0);
+        final Driver defaultDriver3 = driverController.getDrivers().iterator().next();
+        defaultCustomer3.setFirstName("Julia");
+        defaultCustomer3.setLastName("Doe");
+        ArrayList<Dish> select3 = new ArrayList<>();
+        select3.add(defaultDish3);
+        defaultCart3.setItems(select3);
+        defaultOrder3.setCreateTime(LocalDateTime.now());
+        defaultOrder3.setCustomer(defaultCustomer3);
+        defaultOrder3.setCart(defaultCart3);
+        defaultOrder3.setRestaurant(defaultRestaurant3);
+        defaultOrder3.setDriver(defaultDriver3);
+        defaultOrder3.setEstDeliverTime(defaultOrder3.getCreateTime().plusHours(1));
+        defaultOrder3.setStatus(Status.PICKED_UP);
 
         try {
             addOrder(defaultOrder);
+            addOrder(defaultOrder1);
+            addOrder(defaultOrder2);
+            addOrder(defaultOrder3);
         } catch (Exception e) {
             log.error("OrderController > construct > adding default order > failure>");
             e.printStackTrace();
@@ -233,7 +294,8 @@ public class OrderController {
         driverController.manageCompletedOrder(order.getDriver(), order);
         setOrderStatusToDelivered(order);
         notifyCustomer(order);
-        addOrder(order);
+        updateOrder(order);
+
     }
 
     private void notifyCustomer(@Nonnull Order order) {
