@@ -103,6 +103,7 @@ public class DriverController {
             } else {
                 driver.setAvailable(false);
             }
+            updateDriver(driver);
             return true;
         } else {
             return false;
@@ -127,6 +128,7 @@ public class DriverController {
 
         driver.getCurrOrders().remove(order.getId());
         driver.getCompleteOrders().add(order.getId());
+        updateDriver(driver);
         if (driver.getCurrOrders().size() < driver.getMaxOrderNum()) {
             driver.setAvailable(true);
         } else {

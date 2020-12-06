@@ -30,6 +30,7 @@ public class App {
     public static void main(String[] arg) throws Exception {
         System.out.println("--------------Welcome to SnowPaste Delivery-------------");
 
+
         // Restaurant restaurant = (Restaurant) restaurantController.getRestaurants().toArray()[0];
         // Dish dish1 = restaurant.getMenu().get(0);
         // Dish dish2 = restaurant.getMenu().get(1);
@@ -83,5 +84,11 @@ public class App {
 
         // load and start the server
         DaggerServerComponent.create().server().start();
+
+        RepositoryModule repositoryModule = new RepositoryModule();
+        MongoDBService mongoDBService = new MongoDBService();
+        OrderController orderController =
+                new OrderController(repositoryModule.provideOrderRepository(mongoDBService));
+
     }
 }
