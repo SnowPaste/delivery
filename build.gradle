@@ -78,9 +78,9 @@ build.dependsOn += 'clean'
 run.mustRunAfter clean
 run.dependsOn += 'clean'
 
-// Target Java 1.11 - make sure system.properties matches this as well
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+// Target Java 1.8 - make sure system.properties matches this as well
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 sourceSets {
     main {

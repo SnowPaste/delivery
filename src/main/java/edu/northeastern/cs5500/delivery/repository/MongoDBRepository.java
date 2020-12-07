@@ -25,7 +25,7 @@ public class MongoDBRepository<T extends Model> implements GenericRepository<T> 
 
     @Nullable
     public T get(ObjectId id) {
-        return collection.find(eq("id", id)).first();
+        return collection.find(eq("_id", id)).first();
     }
 
     @Override
@@ -39,12 +39,12 @@ public class MongoDBRepository<T extends Model> implements GenericRepository<T> 
 
     @Override
     public T update(T item) {
-        return collection.findOneAndReplace(eq("id", item.getId()), item);
+        return collection.findOneAndReplace(eq("_id", item.getId()), item);
     }
 
     @Override
     public void delete(ObjectId id) {
-        collection.deleteOne(eq("id", id));
+        collection.deleteOne(eq("_id", id));
     }
 
     @Override

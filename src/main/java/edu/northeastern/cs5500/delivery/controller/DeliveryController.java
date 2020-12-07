@@ -29,6 +29,8 @@ public class DeliveryController {
 
         final Delivery defaultDelivery1 = new Delivery();
         defaultDelivery1.setTitle("Hot dog");
+        final ObjectId id = new ObjectId("5fc860ab39d3aa1512ab0971");
+        defaultDelivery1.setId(id);
 
         final Delivery defaultDelivery2 = new Delivery();
         defaultDelivery2.setTitle("A steak");
