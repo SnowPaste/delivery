@@ -118,7 +118,6 @@ public class DriverView implements View {
                     }
                     orderController.completeOrder(order);
                     orderController.updateOrder(order);
-
                     response.status(200);
                     return "The order has been marked as completed";
                 });
