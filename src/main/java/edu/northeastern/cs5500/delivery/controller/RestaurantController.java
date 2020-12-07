@@ -4,10 +4,8 @@ import edu.northeastern.cs5500.delivery.model.*;
 import edu.northeastern.cs5500.delivery.repository.*;
 import edu.northeastern.cs5500.delivery.repository.RepositoryModule;
 import edu.northeastern.cs5500.delivery.service.MongoDBService;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -38,25 +36,25 @@ public class RestaurantController {
 
         log.info("RestaurantController > construct > adding default Restaurants");
 
-        final Restaurant defaultRestaurant1 = new Restaurant();
-        defaultRestaurant1.setName("Little Chengdu");
-        defaultRestaurant1.setEmailAddress("lcd@gmail.com");
-        defaultRestaurant1.setCuisine(Restaurant.Cuisine.INDIAN);
-
-        ArrayList<Dish> menu1 = new ArrayList<>();
-        final Dish defaultDish1 = new Dish();
-        defaultDish1.setName("Hot dog");
-        defaultDish1.setPrice(5.00);
-        menu1.add(defaultDish1);
-
-        defaultRestaurant1.setMenu(menu1);
-        defaultRestaurant1.setPhone("206-779-9780");
-
-        final LocalDateTime t1 = LocalDateTime.now();
-        defaultRestaurant1.setStartTime(t1);
-
-        final Address a1 = new Address();
-        defaultRestaurant1.setAddress(a1);
+        //        final Restaurant defaultRestaurant1 = new Restaurant();
+        //        defaultRestaurant1.setName("Little Chengdu");
+        //        defaultRestaurant1.setEmailAddress("lcd@gmail.com");
+        //        defaultRestaurant1.setCuisine(Restaurant.Cuisine.INDIAN);
+        //
+        //        ArrayList<Dish> menu1 = new ArrayList<>();
+        //        final Dish defaultDish1 = new Dish();
+        //        defaultDish1.setName("Hot dog");
+        //        defaultDish1.setPrice(5.00);
+        //        menu1.add(defaultDish1);
+        //
+        //        defaultRestaurant1.setMenu(menu1);
+        //        defaultRestaurant1.setPhone("206-779-9780");
+        //
+        //        final LocalDateTime t1 = LocalDateTime.now();
+        //        defaultRestaurant1.setStartTime(t1);
+        //
+        //        final Address a1 = new Address();
+        //        defaultRestaurant1.setAddress(a1);
         //
         //        final Restaurant defaultRestaurant2 = new Restaurant();
         //        final Dish defaultDish2 = new Dish();
@@ -65,13 +63,14 @@ public class RestaurantController {
         //        defaultRestaurant2.setName("A steak");
         //        defaultRestaurant2.setPrice(25.00);
 
-        try {
-            addRestaurant(defaultRestaurant1);
-            //            addRestaurant(defaultRestaurant2);
-        } catch (Exception e) {
-            log.error("RestaurantController > construct > adding default Restaurants > failure?");
-            e.printStackTrace();
-        }
+        //        try {
+        //            addRestaurant(defaultRestaurant1);
+        //            //            addRestaurant(defaultRestaurant2);
+        //        } catch (Exception e) {
+        //            log.error("RestaurantController > construct > adding default Restaurants >
+        // failure?");
+        //            e.printStackTrace();
+        //        }
     }
 
     @Nullable
@@ -90,15 +89,12 @@ public class RestaurantController {
     public Restaurant addRestaurant(@Nonnull Restaurant restaurant) throws Exception {
         log.debug("RestaurantController > addRestaurant(...)");
         if (!restaurant.isValid()) {
-            // TODO: replace with a real invalid object exception
-            // probably not one exception per object type though...
             throw new Exception("InvalidRestaurantException");
         }
 
         ObjectId id = restaurant.getId();
 
         if (id != null && restaurants.get(id) != null) {
-            // TODO: replace with a real duplicate key exception
             throw new Exception("DuplicateKeyException");
         }
 
@@ -115,11 +111,30 @@ public class RestaurantController {
         restaurants.delete(id);
     }
 
-    public void finishOrder(@Nonnull Order order) throws Exception {
+    public void addDishes(@Nonnull Restaurant restaurant, @Nonnull Dish dish) throws Exception {
+        log.debug("RestaurantController > deleteRestaurant(...)");
+        ArrayList<Dish> menu = restaurant.getMenu();
+        menu.add(dish);
+    }
+
+    public void deleteDishes(@Nonnull Restaurant restaurant, @Nonnull Dish dish) throws Exception {
+        log.debug("RestaurantController > deleteRestaurant(...)");
+        ArrayList<Dish> menu = restaurant.getMenu();
+        for (Dish d : menu) {
+            if (d.getName().equals(dish.getName())) menu.remove(dish);
+        }
+    }
+
+    public void prepareOrder(@Nonnull Order order) throws Exception {
         log.debug("RestaurantController > finishingOrder(...)");
         if (OrderController.getOrderStatus(order) == Order.Status.PROCESSING) {
             OrderController.setOrderStatusToPreparing(order);
-            TimeUnit.SECONDS.sleep(3);
+        }
+    }
+
+    public void waitOrder(@Nonnull Order order) throws Exception {
+        log.debug("RestaurantController > finishingOrder(...)");
+        if (OrderController.getOrderStatus(order) == Order.Status.PREPARING) {
             OrderController.setOrderStatusToWaiting(order);
             driverController.takeAnOrder(order, order.getDriver());
         }
