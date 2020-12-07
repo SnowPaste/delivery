@@ -6,7 +6,6 @@ import edu.northeastern.cs5500.delivery.controller.*;
 import edu.northeastern.cs5500.delivery.model.*;
 import edu.northeastern.cs5500.delivery.repository.*;
 import edu.northeastern.cs5500.delivery.service.MongoDBService;
-import java.util.concurrent.TimeUnit;
 
 public class App {
     static RepositoryModule repositoryModule = new RepositoryModule();
@@ -31,65 +30,65 @@ public class App {
     public static void main(String[] arg) throws Exception {
         System.out.println("--------------Welcome to SnowPaste Delivery-------------");
 
-        Restaurant restaurant = (Restaurant) restaurantController.getRestaurants().toArray()[0];
-        Dish dish1 = restaurant.getMenu().get(0);
-        Dish dish2 = restaurant.getMenu().get(1);
 
-        Customer customer = (Customer) customerController.getCustomers().toArray()[0];
-        customer.setCart(new Cart());
+        // Restaurant restaurant = (Restaurant) restaurantController.getRestaurants().toArray()[0];
+        // Dish dish1 = restaurant.getMenu().get(0);
+        // Dish dish2 = restaurant.getMenu().get(1);
 
-        cartController.addCart(customer.getCart());
-        Cart cart = customer.getCart();
+        // Customer customer = (Customer) customerController.getCustomers().toArray()[0];
+        // customer.setCart(new Cart());
 
-        cartController.addDish(dish1, cart);
-        TimeUnit.SECONDS.sleep(1);
-        cartController.removeDish(dish1, cart);
-        TimeUnit.SECONDS.sleep(1);
-        cartController.addDish(dish1, cart);
-        TimeUnit.SECONDS.sleep(1);
-        cartController.addDish(dish2, cart);
-        TimeUnit.SECONDS.sleep(1);
-        Order order = orderController.makeOrder(customer, restaurant);
-        TimeUnit.SECONDS.sleep(3);
-        orderController.completeOrder(order);
+        // cartController.addCart(customer.getCart());
+        // Cart cart = customer.getCart();
 
-        // // run on port 5000
-        // port(getAssignedPort());
+        // cartController.addDish(dish1, cart);
+        // TimeUnit.SECONDS.sleep(1);
+        // cartController.removeDish(dish1, cart);
+        // TimeUnit.SECONDS.sleep(1);
+        // cartController.addDish(dish1, cart);
+        // TimeUnit.SECONDS.sleep(1);
+        // cartController.addDish(dish2, cart);
+        // TimeUnit.SECONDS.sleep(1);
+        // Order order = orderController.makeOrder(customer, restaurant);
+        // TimeUnit.SECONDS.sleep(3);
+        // orderController.completeOrder(order);
 
-        // // Allow all cross-origin requests
-        // // Don't do this for real projects!
-        // options(
-        //         "/*",
-        //         (request, response) -> {
-        //             String accessControlRequestHeaders =
-        //                     request.headers("Access-Control-Request-Headers");
-        //             if (accessControlRequestHeaders != null) {
-        //                 response.header(
-        //                         "Access-Control-Allow-Headers", accessControlRequestHeaders);
-        //             }
+        // run on port 5000
+        port(getAssignedPort());
 
-        //             String accessControlRequestMethod =
-        //                     request.headers("Access-Control-Request-Method");
-        //             if (accessControlRequestMethod != null) {
-        //                 response.header("Access-Control-Allow-Methods",
-        // accessControlRequestMethod);
-        //             }
+        // Allow all cross-origin requests
+        // Don't do this for real projects!
+        options(
+                "/*",
+                (request, response) -> {
+                    String accessControlRequestHeaders =
+                            request.headers("Access-Control-Request-Headers");
+                    if (accessControlRequestHeaders != null) {
+                        response.header(
+                                "Access-Control-Allow-Headers", accessControlRequestHeaders);
+                    }
 
-        //             return "OK";
-        //         });
+                    String accessControlRequestMethod =
+                            request.headers("Access-Control-Request-Method");
+                    if (accessControlRequestMethod != null) {
+                        response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+                    }
 
-        // before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+                    return "OK";
+                });
 
-        // // print all unhandled exceptions
-        // exception(Exception.class, (e, req, res) -> e.printStackTrace());
+        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
 
-        // // load and start the server
-        // DaggerServerComponent.create().server().start();
+        // print all unhandled exceptions
+        exception(Exception.class, (e, req, res) -> e.printStackTrace());
 
-        // RepositoryModule repositoryModule = new RepositoryModule();
-        // MongoDBService mongoDBService = new MongoDBService();
-        // OrderController orderController =
-        //         new OrderController(repositoryModule.provideOrderRepository(mongoDBService));
+        // load and start the server
+        DaggerServerComponent.create().server().start();
+
+        RepositoryModule repositoryModule = new RepositoryModule();
+        MongoDBService mongoDBService = new MongoDBService();
+        OrderController orderController =
+                new OrderController(repositoryModule.provideOrderRepository(mongoDBService));
 
     }
 }

@@ -13,7 +13,7 @@ public class Order implements Model {
         WAITING_FOR_DRIVER,
         PICKED_UP,
         DELIVERED,
-        CANCELLED
+        CANCELLED;
     }
 
     private ObjectId id;
