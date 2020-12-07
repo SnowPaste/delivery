@@ -119,24 +119,16 @@ public class RestaurantController {
 
     public void deleteDishes(@Nonnull Restaurant restaurant, @Nonnull Dish dish) throws Exception {
         log.debug("RestaurantController > deleteRestaurant(...)");
-        ArrayList<Dish> menu = restaurant.getMenu();
-        for (Dish d : menu) {
-            if (d.getName().equals(dish.getName())) menu.remove(dish);
-        }
+        restaurant.getMenu().remove(dish);
     }
 
     public void prepareOrder(@Nonnull Order order) throws Exception {
         log.debug("RestaurantController > finishingOrder(...)");
-        if (OrderController.getOrderStatus(order) == Order.Status.PROCESSING) {
-            OrderController.setOrderStatusToPreparing(order);
-        }
+        OrderController.setOrderStatusToPreparing(order);
     }
 
     public void waitOrder(@Nonnull Order order) throws Exception {
         log.debug("RestaurantController > finishingOrder(...)");
-        if (OrderController.getOrderStatus(order) == Order.Status.PREPARING) {
-            OrderController.setOrderStatusToWaiting(order);
-            driverController.takeAnOrder(order, order.getDriver());
-        }
+        driverController.takeAnOrder(order, order.getDriver());
     }
 }

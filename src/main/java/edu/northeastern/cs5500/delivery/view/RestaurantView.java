@@ -12,6 +12,7 @@ import edu.northeastern.cs5500.delivery.controller.RestaurantController;
 import edu.northeastern.cs5500.delivery.model.Dish;
 import edu.northeastern.cs5500.delivery.model.Order;
 import edu.northeastern.cs5500.delivery.model.Restaurant;
+import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -89,11 +90,24 @@ public class RestaurantView implements View {
                     }
                     response.type("application/json");
 
-                    restaurantController.deleteDishes(restaurant, dish);
-                    response.status(200);
+                    ArrayList<Dish> menu = restaurant.getMenu();
+                    boolean flag = false;
+                    for (Dish d : menu) {
+                        if (d.getName().equals(dish.getName())) {
+                            flag = true;
+                            dish = d;
+                        }
+                    }
+                    if (flag) {
+                        restaurantController.deleteDishes(restaurant, dish);
+                        restaurantController.updateRestaurant(restaurant);
+                        response.status(200);
+                    } else {
+                        response.status(400);
+                    }
+
                     return response;
-                },
-                jsonTransformer);
+                });
 
         delete( // delete a restaurant
                 "/restaurant/delete_restaurant/:restaurant_id",
@@ -163,14 +177,14 @@ public class RestaurantView implements View {
                     }
 
                     restaurantController.waitOrder(order);
-                    orderController.updateOrder(order);
+                    //                    orderController.updateOrder(order);
                     response.type("application/json");
                     response.status(200);
                     return response;
                 });
 
         put( // set an order preparing
-                "/restaurant/:restaurant_id/set_order_status_waiting/:order_id",
+                "/restaurant/:restaurant_id/set_order_status_preparing/:order_id",
                 (request, response) -> {
                     final String restaurantIdString = request.params(":restaurant_id");
                     final String orderIdString = request.params(":order_id");
@@ -193,7 +207,8 @@ public class RestaurantView implements View {
                     response.type("application/json");
 
                     restaurantController.prepareOrder(order);
-                    orderController.updateOrder(order);
+                    // order status is not in database
+                    //                    orderController.updateOrder(order);
                     response.status(200);
                     return response;
                 });
