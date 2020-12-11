@@ -58,7 +58,6 @@ public class CustomerView implements View {
                     final String param_id = request.params(":customer_id");
                     final ObjectId id = new ObjectId(param_id);
                     Customer customer = customerController.getCustomer(id);
-                    System.out.println(customer);
                     if (customer == null) {
                         halt(404);
                     }
