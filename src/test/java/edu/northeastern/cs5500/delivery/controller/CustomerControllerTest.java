@@ -3,6 +3,7 @@ package edu.northeastern.cs5500.delivery.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import edu.northeastern.cs5500.delivery.model.*;
 import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
+import java.time.LocalDate;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class CustomerControllerTest {
     Customer customer = new Customer();
     customer.setId(objectId);
     customer.setAccountName(accountName);
-    customer.setPassWord(passWord);
+    customer.setPassword(passWord);
     customer.setFirstName(firstName);
     customer.setLastName(lastName);
     customer.setEmail(email);
@@ -66,7 +67,7 @@ public class CustomerControllerTest {
     customer2.setAccountName(accountName2);
     customer2.setFirstName(firstName2);
     customer2.setLastName(lastName2);
-    customer2.setPassWord(passWord2);
+    customer2.setPassword(passWord2);
     customer2.setPhoneNumber(phoneNumber2);
     customerController.addCustomer(customer2);
     assertTrue(customerController.getCustomers().contains(customer2));
@@ -85,7 +86,7 @@ public class CustomerControllerTest {
     customer2.setAccountName(accountName2);
     customer2.setFirstName(firstName2);
     customer2.setLastName(lastName2);
-    customer2.setPassWord(passWord2);
+    customer2.setPassword(passWord2);
     customer2.setPhoneNumber(phoneNumber2);
     customerController.addCustomer(customer2);
     assertThrows(Exception.class, () -> {
@@ -118,7 +119,7 @@ public class CustomerControllerTest {
     customer2.setAccountName(accountName2);
     customer2.setFirstName(firstName2);
     customer2.setLastName(lastName2);
-    customer2.setPassWord(passWord2);
+    customer2.setPassword(passWord2);
     customer2.setPhoneNumber(phoneNumber2);
     customerController.addCustomer(customer2);
     customerController.deleteCustomer(objectId2);
@@ -206,7 +207,7 @@ public class CustomerControllerTest {
     String firstName = "Jane";
     String lastName = "Doe";
     String securityCode = "123";
-    String expDate = "11/2023";
+    LocalDate expDate = LocalDate.of(2023, 11, 13);
     Address address = new Address();
     ObjectId addressObjectId = ObjectId.get();
     String address1 = "930 14th Ave";
@@ -241,7 +242,7 @@ public class CustomerControllerTest {
     String firstName = "Jane";
     String lastName = "Doe";
     String securityCode = "123";
-    String expDate = "11/2023";
+    LocalDate expDate = LocalDate.of(2023, 11, 13);
     Address address = new Address();
     ObjectId addressObjectId = ObjectId.get();
     String address1 = "930 14th Ave";
@@ -263,7 +264,7 @@ public class CustomerControllerTest {
     creditCard.setExpDate(expDate);
     creditCard.setBillingAddress(address);
     customerController.addCard(customer, creditCard);
-    String newExpDate = "12/2023";
+    LocalDate newExpDate = LocalDate.of(2023, 12, 13);
     creditCard.setExpDate(newExpDate);
     customerController.updateCard(customer, creditCard);
     assertEquals(customerController.getCustomer(objectId).getCreditCards().get(0).getExpDate()
@@ -279,7 +280,7 @@ public class CustomerControllerTest {
     String firstName = "Jane";
     String lastName = "Doe";
     String securityCode = "123";
-    String expDate = "11/2023";
+    LocalDate expDate = LocalDate.of(2023, 11, 13);
     Address address = new Address();
     ObjectId addressObjectId = ObjectId.get();
     String address1 = "930 14th Ave";
