@@ -25,7 +25,7 @@ public class CustomerControllerTest {
     Customer customer = new Customer();
     customer.setId(objectId);
     customer.setAccountName(accountName);
-    customer.setPassWord(passWord);
+    customer.setPassword(passWord);
     customer.setFirstName(firstName);
     customer.setLastName(lastName);
     customer.setEmail(email);
@@ -66,7 +66,7 @@ public class CustomerControllerTest {
     customer2.setAccountName(accountName2);
     customer2.setFirstName(firstName2);
     customer2.setLastName(lastName2);
-    customer2.setPassWord(passWord2);
+    customer2.setPassword(passWord2);
     customer2.setPhoneNumber(phoneNumber2);
     customerController.addCustomer(customer2);
     assertTrue(customerController.getCustomers().contains(customer2));
@@ -85,7 +85,7 @@ public class CustomerControllerTest {
     customer2.setAccountName(accountName2);
     customer2.setFirstName(firstName2);
     customer2.setLastName(lastName2);
-    customer2.setPassWord(passWord2);
+    customer2.setPassword(passWord2);
     customer2.setPhoneNumber(phoneNumber2);
     customerController.addCustomer(customer2);
     assertThrows(Exception.class, () -> {
@@ -118,7 +118,7 @@ public class CustomerControllerTest {
     customer2.setAccountName(accountName2);
     customer2.setFirstName(firstName2);
     customer2.setLastName(lastName2);
-    customer2.setPassWord(passWord2);
+    customer2.setPassword(passWord2);
     customer2.setPhoneNumber(phoneNumber2);
     customerController.addCustomer(customer2);
     customerController.deleteCustomer(objectId2);
