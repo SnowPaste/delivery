@@ -9,11 +9,12 @@ import org.bson.types.ObjectId;
 public class Customer implements Model {
     private ObjectId id;
     private String accountName;
-    private String passWord;
+    private String password;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
+
     private ArrayList<ObjectId> orderHistory = new ArrayList<>();
     private Cart cart = new Cart();
     private ArrayList<Address> addressList = new ArrayList<>();
@@ -28,8 +29,8 @@ public class Customer implements Model {
                 && !firstName.isEmpty()
                 && lastName != null
                 && !lastName.isEmpty()
-                && passWord != null
-                && !passWord.isEmpty()
+                && password != null
+                && !password.isEmpty()
                 && phoneNumber != null
                 && !phoneNumber.isEmpty();
     }

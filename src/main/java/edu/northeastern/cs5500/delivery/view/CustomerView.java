@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 
+
 @Singleton
 @Slf4j
 public class CustomerView implements View {
@@ -245,11 +246,16 @@ public class CustomerView implements View {
                         cartController.addCart(cart);
                     }
 
-                    Cart newCart = cartController.addDish(dish, cart);
-                    customer.setCart(newCart);
-                    customerController.updateCustomer(customer);
-                    return newCart;
-                });
+                    try{
+                        Cart newCart = cartController.addDish(dish, cart);
+                        customer.setCart(newCart);
+                        customerController.updateCustomer(customer);
+                        return newCart;
+                    } catch(Exception e) {
+                        return e.getMessage();
+                    }
+                    
+                }, jsonTransformer);
 
         put(
                 "/customer/:customer_id/remove_dish/:dish_id",
@@ -274,7 +280,7 @@ public class CustomerView implements View {
                     customer.setCart(newCart);
                     customerController.updateCustomer(customer);
                     return newCart;
-                });
+                }, jsonTransformer);
 
         put(
                 "/customer/:customer_id/cancel_order/:order_id",
@@ -300,7 +306,7 @@ public class CustomerView implements View {
                     customer.setOrderHistory(history);
                     customerController.updateCustomer(customer);
                     return order;
-                });
+                }, jsonTransformer);
 
         put(
                 "/customer/:customer_id/empty_cart",
@@ -314,6 +320,7 @@ public class CustomerView implements View {
                     Cart cart = customer.getCart();
                     Cart newCart = cartController.emptyCart(cart);
                     customer.setCart(newCart);
+                    System.out.println(customer.getCart());
                     customerController.updateCustomer(customer);
                     return newCart;
                 });
@@ -376,6 +383,6 @@ public class CustomerView implements View {
                     orderController.addOrder(order);
                     response.type("application/json");
                     return order;
-                });
+                }, jsonTransformer);
     }
 }

@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 @Data
 public class Dish implements Model {
     private ObjectId id;
+    private ObjectId restaurantId;
     private String name;
     private String description;
     private String picture;

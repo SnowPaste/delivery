@@ -169,7 +169,12 @@ public class CartController {
 
     public Cart addDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > addDish({})", dish.getId());
-
+        if (cart.getItems().size() != 0) {
+            ObjectId id = cart.getItems().iterator().next().getRestaurantId();
+            if (!id.equals(dish.getRestaurantId())) {
+                throw new Exception("Only dishes from the same restaurant can be added");
+            }
+        }
         cart.getItems().add(dish);
         cart.setTotalPrice(calculateTotalPrice(cart));
         updateCart(cart);
@@ -189,6 +194,8 @@ public class CartController {
         }
         System.out.println("Dish " + dish.getName() + " is removed");
         if (cart.getItems().isEmpty()) {
+            cart.setTip(0.0);
+            cart.setTotalPrice(0.0);
             System.out.println("Your cart is now empty!");
         }
         updateCart(cart);

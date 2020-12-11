@@ -9,7 +9,7 @@ import org.bson.types.ObjectId;
 public class Cart implements Model {
     private ObjectId id;
     private ArrayList<Dish> items = new ArrayList<Dish>();
-    private Double tip;
+    private Double tip = 0.0;
     private Double totalPrice = 0.0;
 
     /** @return true if this cart is valid */
