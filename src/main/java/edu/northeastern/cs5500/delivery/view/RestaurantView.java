@@ -36,6 +36,14 @@ public class RestaurantView implements View {
     public void register() {
         log.info("RestaurantView > register");
 
+        get(
+            "/restaurants",
+            (request, response) -> {
+                log.debug("/Restaurant");
+                response.type("application/json");
+                return restaurantController.getRestaurants();
+            },
+            jsonTransformer);
 
         get( // get the information of a certain res
                 "/restaurant/:restaurant_id",
