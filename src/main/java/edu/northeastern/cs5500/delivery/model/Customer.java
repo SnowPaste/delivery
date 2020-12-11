@@ -14,10 +14,10 @@ public class Customer implements Model {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private ArrayList<ObjectId> orderHistory;
+    private ArrayList<ObjectId> orderHistory = new ArrayList<>();
     private Cart cart = new Cart();
-    private ArrayList<Address> addressList;
-    private ArrayList<CreditCard> creditCards;
+    private ArrayList<Address> addressList = new ArrayList<>();
+    private ArrayList<CreditCard> creditCards = new ArrayList<>();
 
     /** @return true if this delivery is valid */
     @JsonIgnore
