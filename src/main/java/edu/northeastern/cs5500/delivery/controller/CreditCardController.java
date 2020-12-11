@@ -3,6 +3,7 @@ package edu.northeastern.cs5500.delivery.controller;
 import edu.northeastern.cs5500.delivery.model.CreditCard;
 import edu.northeastern.cs5500.delivery.repository.GenericRepository;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -96,8 +97,22 @@ public class CreditCardController {
      * @return true if the credit card does not expire
      */
     private boolean isCreditCodeValid(CreditCard creditCard) {
-        LocalDate expDate = creditCard.getExpDate();
+        String expDate = creditCard.getExpDate();
+        if (!expDate.contains("/")){
+            return false;
+        }
         LocalDate now = LocalDate.now();
-        return expDate.compareTo(now) > 0;
+        Integer currMonth = Integer.valueOf(now.getMonth().toString());
+        int currYear = now.getYear();
+        String[] expInfo = expDate.split("/");
+        if (expInfo.length != 2 || expInfo[0].length() != 2 || expInfo[1].length() != 4) {
+            return false;
+        }
+        Integer expMonth = Integer.valueOf(expInfo[0]);
+        Integer expYear = Integer.valueOf(expInfo[1]);
+        if ((expMonth > currMonth && expYear >= currYear) || (expYear > currYear)) {
+            return true;
+        }
+        return false;
     }
 }

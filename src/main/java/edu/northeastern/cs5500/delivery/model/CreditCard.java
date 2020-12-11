@@ -13,21 +13,21 @@ public class CreditCard implements Model {
     private String firstName;
     private String lastName;
     private String securityCode;
-    private LocalDate expDate;
+    private String expDate;    // in format "MM/YYYY"
     private Address billingAddress;
 
     /** @return true if this delivery is valid */
     @JsonIgnore
     public boolean isValid() {
         return cardNumber != null
-                && !cardNumber.isEmpty()
-                && firstName != null
-                && !firstName.isEmpty()
-                && lastName != null
-                && !lastName.isEmpty()
-                && securityCode != null
-                && !securityCode.isEmpty()
-                && expDate != null
-                && billingAddress != null;
+            && cardNumber.length() == 16
+            && firstName != null
+            && !firstName.isEmpty()
+            && lastName != null
+            && !lastName.isEmpty()
+            && securityCode != null
+            && !securityCode.isEmpty()
+            && expDate != null
+            && billingAddress != null;
     }
 }

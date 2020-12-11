@@ -65,7 +65,7 @@ public class CustomerController {
         Boolean exists =
                 getCustomers().stream().anyMatch(x -> x.getAccountName().equals(accountName));
 
-        if (id != null || customers.get(id) != null || exists) {
+        if (customers.get(id) != null || exists) {
             throw new Exception("Customer already exists in database");
         }
 
