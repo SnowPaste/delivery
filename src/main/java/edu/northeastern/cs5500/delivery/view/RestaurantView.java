@@ -30,7 +30,7 @@ public class RestaurantView implements View {
         log.info("RestaurantView > register");
 
         get(
-                "/restaurant",
+                "/restaurants",
                 (request, response) -> {
                     log.debug("/Restaurant");
                     response.type("application/json");
@@ -39,7 +39,7 @@ public class RestaurantView implements View {
                 jsonTransformer);
 
         get(
-                "/restaurant:id",
+                "/restaurant/:id",
                 (request, response) -> {
                     final String paramId = request.params(":id");
                     log.debug("/restaurant:id<{}>", paramId);

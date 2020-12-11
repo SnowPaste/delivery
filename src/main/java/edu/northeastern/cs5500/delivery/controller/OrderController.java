@@ -45,7 +45,8 @@ public class OrderController {
         final Order defaultOrder = new Order();
         final Customer defaultCustomer = new Customer();
         final Cart defaultCart = defaultCustomer.getCart();
-        final Restaurant defaultRestaurant = restaurantController.getRestaurants().iterator().next();
+        final Restaurant defaultRestaurant =
+                restaurantController.getRestaurants().iterator().next();
         final Dish defaultDish = defaultRestaurant.getMenu().get(0);
         final Driver defaultDriver = driverController.getDrivers().iterator().next();
         defaultCustomer.setFirstName("John");
@@ -61,11 +62,11 @@ public class OrderController {
         defaultOrder.setEstDeliverTime(defaultOrder.getCreateTime().plusHours(1));
         defaultOrder.setStatus(Status.WAITING_FOR_DRIVER);
 
-
         final Order defaultOrder1 = new Order();
         final Customer defaultCustomer1 = new Customer();
         final Cart defaultCart1 = defaultCustomer.getCart();
-        final Restaurant defaultRestaurant1 = restaurantController.getRestaurants().iterator().next();
+        final Restaurant defaultRestaurant1 =
+                restaurantController.getRestaurants().iterator().next();
         final Dish defaultDish1 = defaultRestaurant.getMenu().get(0);
         final Driver defaultDriver1 = driverController.getDrivers().iterator().next();
         defaultCustomer1.setFirstName("Jane");
@@ -84,7 +85,8 @@ public class OrderController {
         final Order defaultOrder2 = new Order();
         final Customer defaultCustomer2 = new Customer();
         final Cart defaultCart2 = defaultCustomer.getCart();
-        final Restaurant defaultRestaurant2 = restaurantController.getRestaurants().iterator().next();
+        final Restaurant defaultRestaurant2 =
+                restaurantController.getRestaurants().iterator().next();
         final Dish defaultDish2 = defaultRestaurant.getMenu().get(0);
         final Driver defaultDriver2 = driverController.getDrivers().iterator().next();
         defaultCustomer2.setFirstName("June");
@@ -103,7 +105,8 @@ public class OrderController {
         final Order defaultOrder3 = new Order();
         final Customer defaultCustomer3 = new Customer();
         final Cart defaultCart3 = defaultCustomer.getCart();
-        final Restaurant defaultRestaurant3 = restaurantController.getRestaurants().iterator().next();
+        final Restaurant defaultRestaurant3 =
+                restaurantController.getRestaurants().iterator().next();
         final Dish defaultDish3 = defaultRestaurant.getMenu().get(0);
         final Driver defaultDriver3 = driverController.getDrivers().iterator().next();
         defaultCustomer3.setFirstName("Julia");
@@ -295,7 +298,6 @@ public class OrderController {
         setOrderStatusToDelivered(order);
         notifyCustomer(order);
         updateOrder(order);
-
     }
 
     private void notifyCustomer(@Nonnull Order order) {

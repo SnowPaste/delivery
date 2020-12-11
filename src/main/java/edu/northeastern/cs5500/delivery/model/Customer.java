@@ -9,15 +9,15 @@ import org.bson.types.ObjectId;
 public class Customer implements Model {
     private ObjectId id;
     private String accountName;
-    private String passWord;
+    private String password;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
-    private ArrayList<ObjectId> orderHistory;
+    private ArrayList<ObjectId> orderHistory = new ArrayList<ObjectId>();
     private Cart cart = new Cart();
-    private ArrayList<Address> addressList;
-    private ArrayList<CreditCard> creditCards;
+    private ArrayList<Address> addressList = new ArrayList<Address>();
+    private ArrayList<CreditCard> creditCards = new ArrayList<CreditCard>();
 
     /** @return true if this delivery is valid */
     @JsonIgnore
@@ -28,8 +28,8 @@ public class Customer implements Model {
                 && !firstName.isEmpty()
                 && lastName != null
                 && !lastName.isEmpty()
-                && passWord != null
-                && !passWord.isEmpty()
+                && password != null
+                && !password.isEmpty()
                 && phoneNumber != null
                 && !phoneNumber.isEmpty();
     }

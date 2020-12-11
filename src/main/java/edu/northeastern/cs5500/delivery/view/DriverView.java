@@ -2,9 +2,8 @@ package edu.northeastern.cs5500.delivery.view;
 
 import static spark.Spark.delete;
 import static spark.Spark.halt;
-import static spark.Spark.put;
 import static spark.Spark.post;
-import static spark.Spark.get;
+import static spark.Spark.put;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.northeastern.cs5500.delivery.JsonTransformer;
@@ -50,7 +49,7 @@ public class DriverView implements View {
                     final ObjectId driverId = new ObjectId(driverIdString);
                     Driver driver = driverController.getDriver(driverId);
                     if (driver == null) {
-                      halt(404, "No such driver");
+                        halt(404, "No such driver");
                     }
                     if (order.getStatus() != Status.WAITING_FOR_DRIVER) {
                         halt(404, "Order not ready for taking");
@@ -60,7 +59,7 @@ public class DriverView implements View {
                         halt(400, "Driver cannot take more orders currently");
                     }
                     OrderController.setOrderStatusToPickedUp(order);
-//                    orderController.updateOrder(order);
+                    //                    orderController.updateOrder(order);
                     response.status(200);
                     return response;
                 });
@@ -76,8 +75,8 @@ public class DriverView implements View {
                         return "Request body invalid";
                     }
                     driver.setId(null);
-                  response.status(200);
-                  return "New driver successfully added";
+                    response.status(200);
+                    return "New driver successfully added";
                 });
 
         put( // update driver information
@@ -102,19 +101,21 @@ public class DriverView implements View {
                 (request, response) -> {
                     final String orderIdString = request.params(":order_id");
                     log.debug(
-                            "/driver/:driver_id/mark_a_completed_order/:order_id<{}>", orderIdString);
+                            "/driver/:driver_id/mark_a_completed_order/:order_id<{}>",
+                            orderIdString);
                     final ObjectId orderId = new ObjectId(orderIdString);
                     Order order = orderController.getOrder(orderId);
-////                    final String driverIdString = request.params(":driver_id");
-////                    final ObjectId driverId = new ObjectId(driverIdString);
-////                    Driver driver = driverController.getDriver(driverId);
+                    ////                    final String driverIdString =
+                    // request.params(":driver_id");
+                    ////                    final ObjectId driverId = new ObjectId(driverIdString);
+                    ////                    Driver driver = driverController.getDriver(driverId);
                     if (order == null) {
                         halt(400);
                         return "No such order";
                     }
                     if (order.getStatus() != Status.PICKED_UP) {
-                      halt(400);
-                      return "Current order status cannot be marked as completed";
+                        halt(400);
+                        return "Current order status cannot be marked as completed";
                     }
                     orderController.completeOrder(order);
                     orderController.updateOrder(order);
@@ -123,38 +124,40 @@ public class DriverView implements View {
                     return "The order has been marked as completed";
                 });
 
-//        put( // a driver picked up an order, and set the status of the order to be PICKED_UP
-//                "/driver/:driver_id/set_order_status_picked_up/:order_id",
-//                (request, response) -> {
-//                    final String driverIdString = request.params(":driver_id");
-//                    log.debug(
-//                            "/driver/:driver_id<{}>/set_order_status_picked_up/:order_id",
-//                            driverIdString);
-//                    final ObjectId driverId = new ObjectId(driverIdString);
-//                    Driver driver = driverController.getDriver(driverId);
-//                    if (driver == null) {
-//                        halt(404);
-//                    }
-//                    final String orderIdString = request.params(":order_id");
-//                    log.debug(
-//                            "/driver/:driver_id/set_order_status_picked_up/:order_id<{}>",
-//                            orderIdString);
-//                    final ObjectId orderId = new ObjectId(orderIdString);
-//                    Order order = orderController.getOrder(orderId);
-//                    if (order == null) {
-//                        halt(404);
-//                        return "No such order";
-//                    }
-//                    if (!driver.getCurrOrders().contains(order)) {
-////                        response.type("application/json");
-//                        response.status(400);
-//                        return "Current driver doesn't have such order in current order list";
-//                    }
-//                    OrderController.setOrderStatusToPickedUp(order);
-////                    response.type("application/json");
-//                    response.status(200);
-//                    return response;
-//                });
+        //        put( // a driver picked up an order, and set the status of the order to be
+        // PICKED_UP
+        //                "/driver/:driver_id/set_order_status_picked_up/:order_id",
+        //                (request, response) -> {
+        //                    final String driverIdString = request.params(":driver_id");
+        //                    log.debug(
+        //                            "/driver/:driver_id<{}>/set_order_status_picked_up/:order_id",
+        //                            driverIdString);
+        //                    final ObjectId driverId = new ObjectId(driverIdString);
+        //                    Driver driver = driverController.getDriver(driverId);
+        //                    if (driver == null) {
+        //                        halt(404);
+        //                    }
+        //                    final String orderIdString = request.params(":order_id");
+        //                    log.debug(
+        //                            "/driver/:driver_id/set_order_status_picked_up/:order_id<{}>",
+        //                            orderIdString);
+        //                    final ObjectId orderId = new ObjectId(orderIdString);
+        //                    Order order = orderController.getOrder(orderId);
+        //                    if (order == null) {
+        //                        halt(404);
+        //                        return "No such order";
+        //                    }
+        //                    if (!driver.getCurrOrders().contains(order)) {
+        ////                        response.type("application/json");
+        //                        response.status(400);
+        //                        return "Current driver doesn't have such order in current order
+        // list";
+        //                    }
+        //                    OrderController.setOrderStatusToPickedUp(order);
+        ////                    response.type("application/json");
+        //                    response.status(200);
+        //                    return response;
+        //                });
 
         delete( // delete a driver
                 "/driver/delete_a_driver/:driver_id",
