@@ -250,9 +250,9 @@ public class OrderController {
     }
 
     /** Notify restaurant about the order */
-    private void notifyRestaurant(@Nonnull Order order) throws Exception {
-        restaurantController.finishOrder(order);
-    }
+    //    private void notifyRestaurant(@Nonnull Order order) throws Exception {
+    //        restaurantController.finishOrder(order);
+    //    }
 
     /** Place an order with the given cart */
     public Order makeOrder(@Nonnull Customer customer, @Nonnull Restaurant restaurant)
@@ -272,7 +272,7 @@ public class OrderController {
             assignDriver(order);
             System.out.println("Order placed successfully!");
             setOrderStatusToProcessing(order);
-            notifyRestaurant(order);
+            //            notifyRestaurant(order);
             return order;
         } catch (Exception e) {
             log.error("OrderController > makeOrder failure");
