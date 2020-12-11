@@ -36,6 +36,7 @@ public class RestaurantView implements View {
     public void register() {
         log.info("RestaurantView > register");
 
+
         get( // get the information of a certain res
                 "/restaurant/:restaurant_id",
                 (request, response) -> {
@@ -52,6 +53,7 @@ public class RestaurantView implements View {
                     return restaurant;
                 },
                 jsonTransformer);
+
 
         get( // get the menu of a certain res
                 "/restaurant/:restaurant_id/get_menu",
