@@ -41,7 +41,6 @@ public class Restaurant implements Model {
                 && this.address != null
                 && this.phone != null
                 && !this.phone.isEmpty()
-                && this.menu != null
-                && !this.menu.isEmpty();
+                && this.menu != null;
     }
 }
