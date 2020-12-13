@@ -25,7 +25,8 @@ public class MongoDBService implements Service {
         if (databaseURI != null) {
             return databaseURI;
         }
-        return "mongodb://localhost:27017/delivery"; // connect to localhost by default
+        // return "mongodb://localhost:27017/delivery"; // connect to localhost by default
+        return "mongodb+srv://cindy:zxy123@cluster0.6lhhg.mongodb.net/delivery?retryWrites=true&w=majority";
     }
 
     @Getter private MongoDatabase mongoDatabase;

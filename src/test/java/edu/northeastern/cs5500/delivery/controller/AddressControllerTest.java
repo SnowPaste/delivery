@@ -8,30 +8,23 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class AddressControllerTest {
-  private InMemoryRepository<Customer> inMemoryRepository = new InMemoryRepository<>();
+    private InMemoryRepository<Customer> inMemoryRepository = new InMemoryRepository<>();
 
+    @Before
+    public void setUp() throws Exception {}
 
-  @Before
-  public void setUp() throws Exception {
-  }
+    @Test
+    public void getAddress() {}
 
-  @Test
-  public void getAddress() {
-  }
+    @Test
+    public void getAddresses() {}
 
-  @Test
-  public void getAddresses() {
-  }
+    @Test
+    public void addAddress() {}
 
-  @Test
-  public void addAddress() {
-  }
+    @Test
+    public void updateAddress() {}
 
-  @Test
-  public void updateAddress() {
-  }
-
-  @Test
-  public void deleteAddress() {
-  }
+    @Test
+    public void deleteAddress() {}
 }

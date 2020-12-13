@@ -36,22 +36,16 @@ public class CartController {
             return;
         }
 
-        // log.info("CartController > construct > adding default carts");
+        log.info("CartController > construct > adding default carts");
 
-        // final Cart defaultCart1 = new Cart();
-        // final Customer defaultCustomer = new Customer();
-        // final Restaurant defaultRestaurant = new Restaurant();
-        // defaultCustomer.setFirstName("Cindy");
-        // defaultCustomer.setEmail("cindy@mail.com");
-        // defaultCustomer.setPassWord("12345");
-        // defaultCart1.setRestaurant(defaultRestaurant);
+        final Cart defaultCart = new Cart();
 
-        // try {
-        //     addCart(defaultCart1);
-        // } catch (Exception e) {
-        //     log.error("CartController > construct > adding default carts > failure?");
-        //     e.printStackTrace();
-        // }
+        try {
+            addCart(defaultCart);
+        } catch (Exception e) {
+            log.error("CartController > construct > adding default carts > failure?");
+            e.printStackTrace();
+        }
     }
 
     @Nonnull
