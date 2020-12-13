@@ -20,7 +20,7 @@ public class CreditCardController {
     private static final int SECURITY_CODE_LENGTH = 3;
 
     @Inject
-    CreditCardController(GenericRepository<CreditCard> creditCardRepository) {
+    public CreditCardController(GenericRepository<CreditCard> creditCardRepository) {
         creditCards = creditCardRepository;
         log.info("CreditCardController > construct");
     }
@@ -96,7 +96,7 @@ public class CreditCardController {
      * @return true if the credit card does not expire
      */
     private boolean isExpDateValid(CreditCard creditCard) {
-        LocalDate expDate = creditCard.getExpDate();
+        LocalDate expDate = LocalDate.parse(creditCard.getExpDate());
         LocalDate now = LocalDate.now();
         return expDate.compareTo(now) > 0;
     }

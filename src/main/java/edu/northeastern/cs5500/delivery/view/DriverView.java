@@ -123,40 +123,40 @@ public class DriverView implements View {
                     return "The order has been marked as completed";
                 });
 
-        //        put( // a driver picked up an order, and set the status of the order to be
-        // PICKED_UP
-        //                "/driver/:driver_id/set_order_status_picked_up/:order_id",
-        //                (request, response) -> {
-        //                    final String driverIdString = request.params(":driver_id");
-        //                    log.debug(
-        //                            "/driver/:driver_id<{}>/set_order_status_picked_up/:order_id",
-        //                            driverIdString);
-        //                    final ObjectId driverId = new ObjectId(driverIdString);
-        //                    Driver driver = driverController.getDriver(driverId);
-        //                    if (driver == null) {
-        //                        halt(404);
-        //                    }
-        //                    final String orderIdString = request.params(":order_id");
-        //                    log.debug(
-        //                            "/driver/:driver_id/set_order_status_picked_up/:order_id<{}>",
-        //                            orderIdString);
-        //                    final ObjectId orderId = new ObjectId(orderIdString);
-        //                    Order order = orderController.getOrder(orderId);
-        //                    if (order == null) {
-        //                        halt(404);
-        //                        return "No such order";
-        //                    }
-        //                    if (!driver.getCurrOrders().contains(order)) {
-        ////                        response.type("application/json");
-        //                        response.status(400);
-        //                        return "Current driver doesn't have such order in current order
-        // list";
-        //                    }
-        //                    OrderController.setOrderStatusToPickedUp(order);
-        ////                    response.type("application/json");
-        //                    response.status(200);
-        //                    return response;
-        //                });
+        put( // a driver picked up an order, and set the status of the order to be PICKED_UP
+                "/driver/:driver_id/set_order_status_picked_up/:order_id",
+                (request, response) -> {
+                    final String driverIdString = request.params(":driver_id");
+                    log.debug(
+                            "/driver/:driver_id<{}>/set_order_status_picked_up/:order_id",
+                            driverIdString);
+                    final ObjectId driverId = new ObjectId(driverIdString);
+                    Driver driver = driverController.getDriver(driverId);
+                    if (driver == null) {
+                        halt(404);
+                    }
+                    final String orderIdString = request.params(":order_id");
+                    log.debug(
+                            "/driver/:driver_id/set_order_status_picked_up/:order_id<{}>",
+                            orderIdString);
+                    final ObjectId orderId = new ObjectId(orderIdString);
+                    Order order = orderController.getOrder(orderId);
+                    driverController.takeAnOrder(order, driver);
+                    if (order == null) {
+                        halt(404);
+                        return "No such order";
+                    }
+                    if (!driver.getCurrOrders().contains(order.getId())) {
+                        response.type("application/json");
+                        response.status(400);
+                        return "Current driver doesn't have such order in current order list";
+                    }
+                    OrderController.setOrderStatusToPickedUp(order);
+                    orderController.updateOrder(order);
+                    response.type("application/json");
+                    response.status(200);
+                    return response;
+                });
 
         delete( // delete a driver
                 "/driver/delete_a_driver/:driver_id",

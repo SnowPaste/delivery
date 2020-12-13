@@ -87,8 +87,8 @@ public class RepositoryModule {
     }
 
     @Provides
-    public GenericRepository<Cart> provideCartRepository() {
-        return new InMemoryRepository<>();
+    public GenericRepository<Cart> provideCartRepository(MongoDBService mongoDBService) {
+        return new MongoDBRepository<>(Cart.class, mongoDBService);
     }
 
     @Provides

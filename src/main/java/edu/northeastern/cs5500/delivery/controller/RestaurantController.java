@@ -129,6 +129,6 @@ public class RestaurantController {
 
     public void waitOrder(@Nonnull Order order) throws Exception {
         log.debug("RestaurantController > finishingOrder(...)");
-        driverController.takeAnOrder(order, order.getDriver());
+        OrderController.setOrderStatusToWaiting(order);
     }
 }
