@@ -5,6 +5,7 @@ import edu.northeastern.cs5500.delivery.model.Order.Status;
 import edu.northeastern.cs5500.delivery.repository.*;
 import edu.northeastern.cs5500.delivery.service.MongoDBService;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -261,7 +262,7 @@ public class OrderController {
             order.setCart(customer.getCart());
             order.setCustomer(customer);
 
-            order.setCreateTime(LocalDateTime.now());
+            order.setCreateTime(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
             System.out.println(
                     "Order was placed at "
                             + order.getCreateTime().format(DateTimeFormatter.ofPattern("HH:mm")));
@@ -295,7 +296,7 @@ public class OrderController {
 
     public void completeOrder(@Nonnull Order order) throws Exception {
         driverController.manageCompletedOrder(order.getDriver(), order);
-        order.setDeliverTime(LocalDateTime.now());
+        order.setDeliverTime(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
         Customer customer = order.getCustomer();
         ArrayList<ObjectId> orderHistory = customer.getOrderHistory();
         orderHistory.add(order.getId());

@@ -4,7 +4,6 @@ import edu.northeastern.cs5500.delivery.model.*;
 import edu.northeastern.cs5500.delivery.repository.*;
 import edu.northeastern.cs5500.delivery.repository.RepositoryModule;
 import edu.northeastern.cs5500.delivery.service.MongoDBService;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,31 +37,31 @@ public class RestaurantController {
 
         log.info("RestaurantController > construct > adding default Restaurants");
 
-               final Restaurant defaultRestaurant1 = new Restaurant();
-               defaultRestaurant1.setName("Little Chengdu");
-               defaultRestaurant1.setCuisine(Restaurant.Cuisine.INDIAN);
-        
-               ArrayList<Dish> menu1 = new ArrayList<>();
-               final Dish defaultDish1 = new Dish();
-               defaultDish1.setName("Hot dog");
-               defaultDish1.setPrice(5.00);
-               menu1.add(defaultDish1);
-        
-               defaultRestaurant1.setMenu(menu1);
-               defaultRestaurant1.setPhone("206-779-9780");
-        
-               final LocalDateTime t1 = LocalDateTime.now();
-               defaultRestaurant1.setStartTime(t1);
-        
-               final Address a1 = new Address();
-               defaultRestaurant1.setAddress(a1);
+        final Restaurant defaultRestaurant1 = new Restaurant();
+        defaultRestaurant1.setName("Little Chengdu");
+        defaultRestaurant1.setCuisine(Restaurant.Cuisine.INDIAN);
 
-               try {
-                   addRestaurant(defaultRestaurant1);
-               } catch (Exception e) {
-                   log.error("RestaurantController > construct > adding default Restaurants > failure?");
-                   e.printStackTrace();
-               }
+        ArrayList<Dish> menu1 = new ArrayList<>();
+        final Dish defaultDish1 = new Dish();
+        defaultDish1.setName("Hot dog");
+        defaultDish1.setPrice(5.00);
+        menu1.add(defaultDish1);
+
+        defaultRestaurant1.setMenu(menu1);
+        defaultRestaurant1.setPhone("206-779-9780");
+
+        final LocalDateTime t1 = LocalDateTime.now();
+        defaultRestaurant1.setStartTime(t1);
+
+        final Address a1 = new Address();
+        defaultRestaurant1.setAddress(a1);
+
+        try {
+            addRestaurant(defaultRestaurant1);
+        } catch (Exception e) {
+            log.error("RestaurantController > construct > adding default Restaurants > failure?");
+            e.printStackTrace();
+        }
     }
 
     @Nullable
