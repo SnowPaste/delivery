@@ -24,7 +24,6 @@ public class Restaurant implements Model {
 
     //    private Integer ID;
     private ObjectId id;
-    private String emailAddress;
     private String name;
     private Address address;
     private String phone;
@@ -37,14 +36,11 @@ public class Restaurant implements Model {
     /** @return true if this restaurant is valid */
     @JsonIgnore
     public boolean isValid() {
-        return this.emailAddress != null
-                && !this.emailAddress.isEmpty()
-                && this.name != null
+        return this.name != null
                 && !this.name.isEmpty()
                 && this.address != null
                 && this.phone != null
                 && !this.phone.isEmpty()
-                && this.menu != null
-                && !this.menu.isEmpty();
+                && this.menu != null;
     }
 }

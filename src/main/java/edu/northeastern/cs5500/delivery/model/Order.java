@@ -23,14 +23,12 @@ public class Order implements Model {
     private Driver driver;
     private Status status;
     private LocalDateTime estDeliverTime;
-    private LocalDateTime deliverTime;
+    private LocalDateTime deliverTime = null;
     private Cart cart;
-    private String note;
 
     /** @return true if this order is a valid order */
     @JsonIgnore
     public boolean isValid() {
-        // return customer.isValid() && restaurant.isValid() && driver.isValid() && cart.isValid();
-        return true;
+        return customer.isValid() && restaurant.isValid() && driver.isValid() && cart.isValid();
     }
 }

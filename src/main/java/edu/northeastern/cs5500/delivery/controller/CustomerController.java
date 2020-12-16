@@ -28,7 +28,8 @@ public class CustomerController {
             new CreditCardController(repositoryModule.provideCreditCardRepository(mongoDBService));
 
     @Inject
-    CartController cartController = new CartController(repositoryModule.provideCartRepository());
+    CartController cartController =
+            new CartController(repositoryModule.provideCartRepository(mongoDBService));
 
     @Inject
     public CustomerController(GenericRepository<Customer> customerRepository) {
@@ -107,13 +108,16 @@ public class CustomerController {
         return address;
     }
 
-    public void deleteAddress(@Nonnull Customer customer, @Nonnull Address address)
+    public void deleteAddress(@Nonnull Customer customer, @Nonnull ObjectId address_id)
             throws Exception {
         log.debug("CustomerController > deleteAddress(...)");
         ArrayList<Address> newAddressList = customer.getAddressList();
-        newAddressList.remove(address);
+        try {
+            newAddressList.removeIf(x -> x.getId().equals(address_id));
+        } catch (Exception e) {
+        }
         customer.setAddressList(newAddressList);
-        addressController.deleteAddress(address.getId());
+        addressController.deleteAddress(address_id);
         updateCustomer(customer);
     }
 
@@ -140,12 +144,15 @@ public class CustomerController {
         return card;
     }
 
-    public void deleteCard(@Nonnull Customer customer, @Nonnull CreditCard card) throws Exception {
+    public void deleteCard(@Nonnull Customer customer, @Nonnull ObjectId card_id) throws Exception {
         log.debug("CustomerController > deleteCard(...)");
         ArrayList<CreditCard> newCardList = customer.getCreditCards();
-        newCardList.remove(card);
+        try {
+            newCardList.removeIf(x -> x.getId().equals(card_id));
+        } catch (Exception e) {
+        }
         customer.setCreditCards(newCardList);
-        cardController.deleteCreditCard(card.getId());
+        cardController.deleteCreditCard(card_id);
         updateCustomer(customer);
     }
 }

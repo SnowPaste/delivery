@@ -156,14 +156,14 @@ public class CustomerView implements View {
                     final ObjectId customer_id = new ObjectId(customer_param_id);
                     final String address_param_id = request.params(":address_id");
                     final ObjectId address_id = new ObjectId(address_param_id);
+
                     Customer customer = customerController.getCustomer(customer_id);
-                    Address address = addressController.getAddress(address_id);
-                    if (customer == null || address == null) {
+                    if (customer == null) {
                         halt(404);
                     }
-                    customerController.deleteAddress(customer, address);
+                    customerController.deleteAddress(customer, address_id);
                     response.type("application/json");
-                    return address;
+                    return customer.getAddressList();
                 });
 
         put(
@@ -212,13 +212,12 @@ public class CustomerView implements View {
                     final String card_param_id = request.params(":card_id");
                     final ObjectId card_id = new ObjectId(card_param_id);
                     Customer customer = customerController.getCustomer(customer_id);
-                    CreditCard card = cardController.getCreditCard(card_id);
-                    if (customer == null || card == null) {
+                    if (customer == null) {
                         halt(404);
                     }
-                    customerController.deleteCard(customer, card);
+                    customerController.deleteCard(customer, card_id);
                     response.type("application/json");
-                    return card;
+                    return customer.getCreditCards();
                 });
 
         put(
@@ -321,7 +320,6 @@ public class CustomerView implements View {
                     Cart cart = customer.getCart();
                     Cart newCart = cartController.emptyCart(cart);
                     customer.setCart(newCart);
-                    System.out.println(customer.getCart());
                     customerController.updateCustomer(customer);
                     return newCart;
                 });
@@ -381,7 +379,7 @@ public class CustomerView implements View {
                     }
 
                     Order order = orderController.makeOrder(customer, restaurant);
-                    orderController.addOrder(order);
+                    // orderController.addOrder(order);
                     response.type("application/json");
                     return order;
                 },

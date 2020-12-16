@@ -37,13 +37,13 @@ public class RestaurantView implements View {
         log.info("RestaurantView > register");
 
         get(
-            "/restaurants",
-            (request, response) -> {
-                log.debug("/Restaurant");
-                response.type("application/json");
-                return restaurantController.getRestaurants();
-            },
-            jsonTransformer);
+                "/restaurants",
+                (request, response) -> {
+                    log.debug("/Restaurant");
+                    response.type("application/json");
+                    return restaurantController.getRestaurants();
+                },
+                jsonTransformer);
 
         get( // get the information of a certain res
                 "/restaurant/:restaurant_id",
@@ -61,7 +61,6 @@ public class RestaurantView implements View {
                     return restaurant;
                 },
                 jsonTransformer);
-
 
         get( // get the menu of a certain res
                 "/restaurant/:restaurant_id/get_menu",
@@ -187,11 +186,11 @@ public class RestaurantView implements View {
                     }
 
                     restaurantController.waitOrder(order);
-                    //                    orderController.updateOrder(order);
+                    orderController.updateOrder(order);
                     response.type("application/json");
-                    response.status(200);
-                    return response;
-                });
+                    return order;
+                },
+                jsonTransformer);
 
         put( // set an order preparing
                 "/restaurant/:restaurant_id/set_order_status_preparing/:order_id",
@@ -217,10 +216,9 @@ public class RestaurantView implements View {
                     response.type("application/json");
 
                     restaurantController.prepareOrder(order);
-                    // order status is not in database
-                    //                    orderController.updateOrder(order);
-                    response.status(200);
-                    return response;
-                });
+                    orderController.updateOrder(order);
+                    return order;
+                },
+                jsonTransformer);
     }
 }
