@@ -25,10 +25,11 @@ public class Order implements Model {
     private LocalDateTime estDeliverTime;
     private LocalDateTime deliverTime = null;
     private Cart cart;
+    private Address address;
 
     /** @return true if this order is a valid order */
     @JsonIgnore
     public boolean isValid() {
-        return customer.isValid() && restaurant.isValid() && driver.isValid() && cart.isValid();
+        return customer.isValid() && restaurant.isValid() && cart.isValid();
     }
 }

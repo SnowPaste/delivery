@@ -363,6 +363,8 @@ public class CustomerView implements View {
         post(
                 "/customer/:customer_id/make_order/:restaurant_id",
                 (request, response) -> {
+                    ObjectMapper mapper = new ObjectMapper();
+                    Address address = mapper.readValue(request.body(), Address.class);
                     final String customer_param_id = request.params(":customer_id");
                     final ObjectId customer_id = new ObjectId(customer_param_id);
                     Customer customer = customerController.getCustomer(customer_id);
@@ -378,7 +380,7 @@ public class CustomerView implements View {
                         return "";
                     }
 
-                    Order order = orderController.makeOrder(customer, restaurant);
+                    Order order = orderController.makeOrder(customer, restaurant, address);
                     // orderController.addOrder(order);
                     response.type("application/json");
                     return order;

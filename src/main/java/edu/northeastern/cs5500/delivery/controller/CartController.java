@@ -136,7 +136,7 @@ public class CartController {
         return rawPrice * DEFAULT_TIP_RATE;
     }
 
-    private Double calculateTotalPrice(@Nonnull Cart cart) {
+    private Double calculateTotalPrice(@Nonnull Cart cart) throws Exception {
         log.debug("CartController > calculateTotalPrice(...)");
         Double total = calculateRawPrice(cart);
         if (cart.getTip() == null) {
@@ -146,6 +146,7 @@ public class CartController {
             total += cart.getTip();
         }
         cart.setTotalPrice(total);
+        updateCart(cart);
         return total;
     }
 
@@ -178,7 +179,7 @@ public class CartController {
 
     public Cart removeDish(@Nonnull Dish dish, @Nonnull Cart cart) throws Exception {
         log.debug("CartController > removeDish({})", dish.getId());
-        if (dishController.getDish(dish.getId()) == null) {
+        if (!cart.getItems().contains(dish)) {
             throw new Exception("Dish doesn't exists");
         }
 

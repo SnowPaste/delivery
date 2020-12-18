@@ -65,6 +65,7 @@ application {
 test {
     // Use junit platform for unit tests
     useJUnitPlatform()
+    jvmArgs '-Djdk.tls.client.protocols=TLSv1.2'
 }
 
 // Heroku will run the 'stage' task on deployment via git
