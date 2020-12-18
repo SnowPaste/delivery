@@ -1,7 +1,7 @@
 # SnowPaste Delivery
 ---
 This is a basic Delivery project for CS5500 Fall 2020.
-* Group Members: Xinyan Zhang, 
+* Group Members: Xinyan Zhang, Xinyi Liu, Tianyiru Chen
 * Website: https://snow-paste-frontend.herokuapp.com
 * Video Presentation: <>
 * API documentation: 
