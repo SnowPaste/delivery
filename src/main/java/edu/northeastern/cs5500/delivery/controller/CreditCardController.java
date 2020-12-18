@@ -41,9 +41,9 @@ public class CreditCardController {
     public CreditCard addCreditCard(@Nonnull CreditCard creditCard) throws Exception {
         log.debug("CreditCardController > addCreditCard(...)");
         if (!creditCard.isValid()
-                && isCreditCardNumberValid(creditCard)
-                && isExpDateValid(creditCard)
-                && isSecurityCodeValid(creditCard)) {
+                || !isCreditCardNumberValid(creditCard)
+                || !isExpDateValid(creditCard)
+                || !isSecurityCodeValid(creditCard)) {
             // TODO: replace with a real invalid object exception
             // probably not one exception per object type though...
             throw new Exception("InvalidCreditCardException");
