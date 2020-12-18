@@ -25,6 +25,7 @@ public class Order implements Model {
     private LocalDateTime estDeliverTime;
     private LocalDateTime deliverTime = null;
     private Cart cart;
+    private Address address;
 
     /** @return true if this order is a valid order */
     @JsonIgnore
