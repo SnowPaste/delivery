@@ -190,6 +190,7 @@ public class OrderController {
         System.out.println(
                 "The estimated deliver time is "
                         + order.getEstDeliverTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+        updateOrder(order);
         return order.getEstDeliverTime();
     }
 
