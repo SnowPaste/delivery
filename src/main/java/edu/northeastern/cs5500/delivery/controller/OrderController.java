@@ -255,13 +255,15 @@ public class OrderController {
     }
 
     /** Place an order with the given cart */
-    public Order makeOrder(@Nonnull Customer customer, @Nonnull Restaurant restaurant)
+    public Order makeOrder(
+            @Nonnull Customer customer, @Nonnull Restaurant restaurant, @Nonnull Address address)
             throws Exception {
         try {
             Order order = new Order();
             order.setRestaurant(restaurant);
             order.setCart(customer.getCart());
             order.setCustomer(customer);
+            order.setAddress(address);
 
             order.setCreateTime(LocalDateTime.now(ZoneId.of("America/Los_Angeles")));
             System.out.println(
@@ -284,7 +286,7 @@ public class OrderController {
     }
 
     /** Cancel order */
-    public void cancelOrder(@Nonnull Order order) throws Exception {
+    public Order cancelOrder(@Nonnull Order order) throws Exception {
         if (order.getStatus() != Status.PROCESSING) {
             throw new Exception(
                     "The restaurant has started preparing your order, your order can't be cancelled");
@@ -292,6 +294,7 @@ public class OrderController {
             setOrderStatusToCancelled(order);
             updateOrder(order);
             System.out.println("Your order has been cancelled");
+            return order;
         }
     }
 
@@ -304,11 +307,6 @@ public class OrderController {
         customer.setOrderHistory(orderHistory);
         customerController.updateCustomer(customer);
         setOrderStatusToDelivered(order);
-        notifyCustomer(order);
         updateOrder(order);
-    }
-
-    private void notifyCustomer(@Nonnull Order order) {
-        System.out.println("Your order has been delivered! Enjoy:)");
     }
 }
