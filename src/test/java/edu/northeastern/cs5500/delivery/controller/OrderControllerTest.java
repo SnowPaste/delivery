@@ -14,6 +14,7 @@ import edu.northeastern.cs5500.delivery.repository.InMemoryRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import org.bson.types.ObjectId;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -312,7 +313,13 @@ class OrderControllerTest {
         cart.setItems(items);
         customer.setCart(cart);
 
-        Order order = orderController.makeOrder(customer, restaurant);
+        Address orderAddress = new Address();
+        orderAddress.setAddress1("orderAddress");
+        orderAddress.setCity("orderCity");
+        orderAddress.setState("orderState");
+        orderAddress.setZip("orderZip");
+
+        Order order = orderController.makeOrder(customer, restaurant, orderAddress);
         assertNotNull(order);
         assertEquals(customer.getId(), order.getCustomer().getId());
         assertEquals(restaurant.getId(), order.getRestaurant().getId());
