@@ -2,9 +2,13 @@
 ---
 This is a basic Delivery project for CS5500 Fall 2020.
 * Group Members: Xinyan Zhang, Xinyi Liu, Tianyiru Chen
-* Website: https://snow-paste-frontend.herokuapp.com
 * Video Presentation: <>
-* API documentation: 
+* Deployed Website: https://snow-paste-frontend.herokuapp.com
+* Deployed API: https://snow-paste.herokuapp.com/restaurants
+* API documentation: https://github.com/SnowPaste/snowpaste-delivery-stoplight/blob/main/delivery.v1.yaml
+* Github repository for backend API: https://github.com/SnowPaste/delivery
+* Github repository for frontend: https://github.com/SnowPaste/delivery-react-frontend
+
 
 ## Design Document
 [Google Docs Link](https://docs.google.com/document/d/1jgMuL628ks2XB1XmzFtcONzXRl6IS-U3eA_Ug2Pe9XQ/edit?usp=sharing)
